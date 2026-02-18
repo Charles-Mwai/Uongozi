@@ -1,0 +1,155 @@
+import React, { useState, useRef, useEffect } from 'react';
+import { useApp } from '../../context/AppContext';
+import BottomNav from '../ui/BottomNav';
+
+interface Message {
+    id: number;
+    type: 'bot' | 'user';
+    text: string;
+    article?: string;
+    timestamp: string;
+}
+
+const AskKatiba: React.FC = () => {
+    const { setCurrentScreen, initialQuery, setInitialQuery } = useApp();
+    const [messages, setMessages] = useState<Message[]>([
+        {
+            id: 1,
+            type: 'bot',
+            text: "Habari! 👋 I'm your Katiba guide. Ask me anything about Kenya's Constitution 2010, your rights, or how government works. I'll explain it in simple, clear language — in English or Kiswahili!",
+            article: "📖 Based on the Constitution of Kenya, 2010",
+            timestamp: "Just now"
+        }
+    ]);
+    const [input, setInput] = useState('');
+    const [isTyping, setIsTyping] = useState(false);
+    const scrollRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (initialQuery) {
+            handleSend(initialQuery);
+            setInitialQuery('');
+        }
+    }, []);
+
+    useEffect(() => {
+        if (scrollRef.current) {
+            scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+        }
+    }, [messages, isTyping]);
+
+    const handleSend = async (text: string) => {
+        if (!text.trim()) return;
+
+        const userMsg: Message = {
+            id: Date.now(),
+            type: 'user',
+            text,
+            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        };
+
+        setMessages(prev => [...prev, userMsg]);
+        setInput('');
+        setIsTyping(true);
+
+        try {
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    message: text,
+                    history: messages.slice(-5) // Send last few messages for context
+                })
+            });
+
+            const data = await response.json();
+
+            if (data.error) throw new Error(data.error);
+
+            const botMsg: Message = {
+                id: Date.now() + 1,
+                type: 'bot',
+                text: data.answer,
+                article: data.article ? `📖 ${data.article}` : undefined,
+                timestamp: "Just now"
+            };
+            setMessages(prev => [...prev, botMsg]);
+        } catch (error) {
+            console.error('Error:', error);
+            const errorMsg: Message = {
+                id: Date.now() + 1,
+                type: 'bot',
+                text: "I'm sorry, I'm having trouble connecting to my legal database right now. Please try again in a moment.",
+                timestamp: "Just now"
+            };
+            setMessages(prev => [...prev, errorMsg]);
+        } finally {
+            setIsTyping(false);
+        }
+    };
+
+    const quickQuestions = [
+        { label: "Arrest rights", icon: "🚓" },
+        { label: "MPs count", icon: "🏛️" },
+        { label: "Devolution", icon: "🗺️" },
+        { label: "Article 10", icon: "📜" },
+        { label: "Report corruption", icon: "🔍" }
+    ];
+
+    return (
+        <div id="ask" className="screen active">
+            <header className="ask-header">
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                    <button className="ask-back" onClick={() => setCurrentScreen('home')}>
+                        ←
+                    </button>
+                    <div className="ask-title-group">
+                        <h2>Ask the Constitution</h2>
+                        <p>Katiba 2010 explained in plain language</p>
+                    </div>
+                </div>
+            </header>
+
+            <div className="chat-messages" ref={scrollRef}>
+                {messages.map((m) => (
+                    <div key={m.id} className={`message ${m.type}`}>
+                        <div className="message-bubble">
+                            <div className="message-text">{m.text}</div>
+                            {m.article && <div className="message-tag">{m.article}</div>}
+                        </div>
+                        <div className="message-meta">Katiba AI • {m.timestamp}</div>
+                    </div>
+                ))}
+            </div>
+
+            <div className="quick-questions">
+                <div className="quick-label">QUICK QUESTIONS</div>
+                <div className="quick-btns">
+                    {quickQuestions.map(q => (
+                        <button key={q.label} className="quick-btn" onClick={() => handleSend(q.label)}>
+                            <span className="q-icon">{q.icon}</span> {q.label}
+                        </button>
+                    ))}
+                </div>
+            </div>
+
+            <div className="ask-input-area">
+                <div className="input-box-wrapper">
+                    <textarea
+                        className="ask-input"
+                        placeholder="Ask anything about the Kenyan Constitution..."
+                        value={input}
+                        onChange={(e) => setInput(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && (e.preventDefault(), handleSend(input))}
+                    />
+                </div>
+                <button className="ask-send-btn" onClick={() => handleSend(input)}>↑</button>
+            </div>
+
+            <div style={{ height: '80px' }}></div>
+            <BottomNav />
+        </div>
+    );
+};
+
+export default AskKatiba;

@@ -1,0 +1,3904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UongoZi — Civic Education Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green: #0a3d2e;
+  --gold: #c9a84c;
+  --gold-light: #f0c96b;
+  --cream: #faf7f0;
+  --white: #ffffff;
+  --dark: #0d1117;
+  --gray: #6b7280;
+  --gray-light: #f3f4f6;
+  --red: #dc2626;
+  --rights: #16a34a;
+  --rights-bg: #dcfce7;
+  --voting: #ea580c;
+  --voting-bg: #ffedd5;
+  --govt: #2563eb;
+  --govt-bg: #dbeafe;
+  --budget: #7c3aed;
+  --budget-bg: #ede9fe;
+  --katiba: #be185d;
+  --katiba-bg: #fce7f3;
+  --radius: 16px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.08);
+  --shadow-lg: 0 12px 48px rgba(0,0,0,0.15);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--dark);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* SCREENS */
+.screen { display: none; min-height: 100vh; }
+.screen.active { display: flex; flex-direction: column; }
+
+/* ═══════════════════════════════════════
+   SPLASH SCREEN
+═══════════════════════════════════════ */
+#splash {
+  background: var(--green);
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.splash-bg {
+  position: absolute; inset: 0;
+  background: 
+    radial-gradient(ellipse at 20% 20%, rgba(201,168,76,0.15) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 80%, rgba(201,168,76,0.1) 0%, transparent 60%);
+}
+
+.splash-pattern {
+  position: absolute; inset: 0;
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 40px,
+    rgba(255,255,255,0.02) 40px,
+    rgba(255,255,255,0.02) 41px
+  );
+}
+
+.splash-content {
+  position: relative; z-index: 2;
+  text-align: center;
+  padding: 40px 30px;
+  animation: splashIn 0.8s cubic-bezier(0.34,1.56,0.64,1) forwards;
+}
+
+@keyframes splashIn {
+  from { opacity:0; transform: scale(0.8) translateY(30px); }
+  to { opacity:1; transform: scale(1) translateY(0); }
+}
+
+.logo-mark {
+  width: 80px; height: 80px;
+  background: var(--gold);
+  border-radius: 24px;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 24px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 28px;
+  color: var(--green);
+  box-shadow: 0 8px 32px rgba(201,168,76,0.4);
+  transform: rotate(-3deg);
+}
+
+.splash-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 52px;
+  color: var(--white);
+  letter-spacing: -2px;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.splash-title span { color: var(--gold); }
+
+.splash-tagline {
+  font-size: 13px;
+  color: rgba(255,255,255,0.5);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 48px;
+}
+
+.splash-meaning {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 16px 24px;
+  margin-bottom: 48px;
+  display: inline-block;
+}
+
+.splash-meaning p {
+  color: rgba(255,255,255,0.7);
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.splash-meaning strong { color: var(--gold); }
+
+.btn-primary {
+  background: var(--gold);
+  color: var(--green);
+  border: none;
+  padding: 18px 48px;
+  border-radius: 100px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 8px 24px rgba(201,168,76,0.4);
+  display: inline-block;
+  width: 100%;
+  max-width: 320px;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(201,168,76,0.5);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: rgba(255,255,255,0.6);
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 14px 40px;
+  border-radius: 100px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  margin: 12px auto 0;
+}
+
+
+/* ═══════════════════════════════════════
+   LANGUAGE SELECTOR OVERLAY
+═══════════════════════════════════════ */
+#langSelect {
+  background: var(--green);
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
+}
+
+.lang-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 30%, rgba(201,168,76,0.18) 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 70%, rgba(201,168,76,0.1) 0%, transparent 55%);
+}
+
+.lang-pattern {
+  position: absolute; inset: 0;
+  background-image: repeating-linear-gradient(
+    -45deg, transparent, transparent 38px,
+    rgba(255,255,255,0.025) 38px, rgba(255,255,255,0.025) 39px
+  );
+}
+
+.lang-content {
+  position: relative; z-index: 2;
+  text-align: center;
+  padding: 40px 28px;
+  width: 100%;
+  max-width: 400px;
+  animation: splashIn 0.7s cubic-bezier(0.34,1.3,0.64,1) forwards;
+}
+
+.lang-logo {
+  width: 70px; height: 70px;
+  background: var(--gold);
+  border-radius: 20px;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 20px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 800; font-size: 26px;
+  color: var(--green);
+  box-shadow: 0 8px 32px rgba(201,168,76,0.4);
+  transform: rotate(-3deg);
+}
+
+.lang-app-name {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800; font-size: 44px;
+  color: white; letter-spacing: -2px;
+  line-height: 1; margin-bottom: 28px;
+}
+.lang-app-name span { color: var(--gold); }
+
+/* Welcome message */
+.welcome-msg {
+  margin-bottom: 28px;
+  min-height: 64px;
+  transition: opacity 0.3s ease;
+}
+
+.welcome-msg h2 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800; font-size: 24px;
+  color: white; margin-bottom: 6px;
+  line-height: 1.2;
+}
+
+.welcome-msg p {
+  font-size: 14px;
+  color: rgba(255,255,255,0.65);
+  line-height: 1.6;
+}
+
+/* Language cards */
+.lang-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 28px;
+  width: 100%;
+}
+
+.lang-card {
+  background: rgba(255,255,255,0.07);
+  border: 2px solid rgba(255,255,255,0.12);
+  border-radius: 16px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.lang-card:hover:not(.disabled) {
+  background: rgba(255,255,255,0.13);
+  border-color: var(--gold);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+}
+
+.lang-card.selected {
+  background: rgba(201,168,76,0.15);
+  border-color: var(--gold);
+}
+
+.lang-card.disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.lang-flag {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px;
+  flex-shrink: 0;
+  background: rgba(255,255,255,0.08);
+}
+
+.lang-info { flex: 1; }
+
+.lang-name {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700; font-size: 16px;
+  color: white; margin-bottom: 2px;
+}
+
+.lang-desc {
+  font-size: 12px;
+  color: rgba(255,255,255,0.55);
+  line-height: 1.4;
+}
+
+.lang-check {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.25);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+
+.lang-card.selected .lang-check {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--green);
+}
+
+.coming-soon-tag {
+  position: absolute;
+  top: 10px; right: 10px;
+  background: rgba(201,168,76,0.25);
+  border: 1px solid rgba(201,168,76,0.4);
+  color: var(--gold);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 100px;
+}
+
+.lang-cta {
+  background: var(--gold);
+  color: var(--green);
+  border: none;
+  padding: 18px;
+  width: 100%;
+  border-radius: 14px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 800; font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 8px 24px rgba(201,168,76,0.4);
+  margin-bottom: 10px;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.lang-cta.ready {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.lang-cta.ready:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(201,168,76,0.5);
+}
+
+.lang-cta-text { transition: all 0.2s; }
+
+/* Language indicator on home header */
+.lang-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 100px;
+  padding: 4px 10px;
+  font-size: 11px;
+  color: rgba(255,255,255,0.8);
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-top: 6px;
+}
+.lang-badge:hover { background: rgba(255,255,255,0.2); }
+
+
+.flag-strip {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(to right, #006600 33%, #cc0001 33%, #cc0001 66%, #000000 66%);
+}
+
+/* ═══════════════════════════════════════
+   ONBOARDING / PROFILE SETUP
+═══════════════════════════════════════ */
+#onboarding {
+  background: var(--white);
+  padding: 40px 24px;
+  justify-content: center;
+}
+
+.onboard-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.onboard-header h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--green);
+  margin-bottom: 8px;
+}
+
+.onboard-header p {
+  color: var(--gray);
+  font-size: 14px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: block;
+  font-weight: 500;
+  font-size: 13px;
+  color: var(--gray);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 16px 20px;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 16px;
+  font-family: 'DM Sans', sans-serif;
+  transition: border-color 0.2s;
+  background: var(--cream);
+  color: var(--dark);
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--green);
+  background: white;
+}
+
+.form-select {
+  width: 100%;
+  padding: 16px 20px;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 15px;
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  cursor: pointer;
+  color: var(--dark);
+}
+
+.form-select:focus { outline: none; border-color: var(--green); }
+
+/* ═══════════════════════════════════════
+   HOME / DASHBOARD
+═══════════════════════════════════════ */
+#home {
+  background: var(--cream);
+}
+
+.home-header {
+  background: var(--green);
+  padding: 24px 20px 60px;
+  position: relative;
+  overflow: hidden;
+}
+
+.home-header-bg {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 80% 50%, rgba(201,168,76,0.15) 0%, transparent 60%);
+}
+
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  position: relative; z-index: 1;
+}
+
+.header-logo {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 22px;
+  color: white;
+}
+
+.header-logo span { color: var(--gold); }
+
+.header-avatar {
+  width: 40px; height: 40px;
+  background: var(--gold);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--green);
+  cursor: pointer;
+}
+
+.user-greeting {
+  position: relative; z-index: 1;
+}
+
+.user-greeting p {
+  color: rgba(255,255,255,0.6);
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+.user-greeting h2 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  color: white;
+  margin-bottom: 16px;
+}
+
+.xp-bar-container {
+  background: rgba(255,255,255,0.1);
+  border-radius: 100px;
+  height: 6px;
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+
+.xp-bar-fill {
+  height: 100%;
+  background: linear-gradient(to right, var(--gold), var(--gold-light));
+  border-radius: 100px;
+  transition: width 1s ease;
+}
+
+.xp-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: rgba(255,255,255,0.6);
+}
+
+.xp-label strong { color: var(--gold); }
+
+/* Stats strip */
+.stats-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  padding: 0 16px;
+  margin-top: -36px;
+  position: relative; z-index: 2;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: white;
+  border-radius: 14px;
+  padding: 14px 12px;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+
+.stat-value {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 22px;
+  color: var(--green);
+}
+
+.stat-label {
+  font-size: 10px;
+  color: var(--gray);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 2px;
+}
+
+/* Section */
+.section {
+  padding: 0 16px 20px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 17px;
+  color: var(--dark);
+}
+
+.section-link {
+  font-size: 12px;
+  color: var(--green);
+  cursor: pointer;
+  font-weight: 500;
+}
+
+/* Category cards */
+.categories-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.category-card {
+  background: white;
+  border-radius: 16px;
+  padding: 18px 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: var(--shadow);
+  border: 2px solid transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.category-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+
+.category-card.locked {
+  opacity: 0.6;
+}
+
+.category-icon {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+  margin-bottom: 12px;
+}
+
+.category-name {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--dark);
+  margin-bottom: 2px;
+  line-height: 1.3;
+}
+
+.category-sw {
+  font-size: 11px;
+  color: var(--gray);
+  margin-bottom: 10px;
+  font-style: italic;
+}
+
+.category-progress {
+  height: 4px;
+  background: #f0f0f0;
+  border-radius: 100px;
+  overflow: hidden;
+}
+
+.category-progress-fill {
+  height: 100%;
+  border-radius: 100px;
+  transition: width 0.8s ease;
+}
+
+.category-questions {
+  font-size: 10px;
+  color: var(--gray);
+  margin-top: 6px;
+}
+
+.lock-icon {
+  position: absolute;
+  top: 12px; right: 12px;
+  font-size: 14px;
+}
+
+/* Ask Katiba CTA */
+.katiba-cta {
+  background: linear-gradient(135deg, var(--green) 0%, #1a5c42 100%);
+  border-radius: 18px;
+  padding: 20px;
+  margin: 0 16px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  cursor: pointer;
+  transition: transform 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.katiba-cta:hover { transform: scale(1.02); }
+
+.katiba-cta-bg {
+  position: absolute; right: -20px; top: -20px;
+  width: 100px; height: 100px;
+  background: rgba(201,168,76,0.15);
+  border-radius: 50%;
+}
+
+.katiba-cta-icon {
+  width: 52px; height: 52px;
+  background: var(--gold);
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.katiba-cta-text h3 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  color: white;
+  margin-bottom: 4px;
+}
+
+.katiba-cta-text p {
+  font-size: 12px;
+  color: rgba(255,255,255,0.65);
+  line-height: 1.4;
+}
+
+/* Streak banner */
+.streak-banner {
+  background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+  margin: 0 16px 20px;
+  border-radius: 14px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.streak-banner .streak-num {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 28px;
+  color: white;
+}
+
+.streak-banner .streak-text {
+  font-size: 13px;
+  color: rgba(255,255,255,0.9);
+  font-weight: 500;
+}
+
+/* Bottom nav */
+.bottom-nav {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: white;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  padding: 8px 0 20px;
+  z-index: 100;
+}
+
+.nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  padding: 8px 0;
+  transition: all 0.2s;
+}
+
+.nav-icon { font-size: 22px; }
+
+.nav-label {
+  font-size: 10px;
+  color: var(--gray);
+  font-weight: 500;
+}
+
+.nav-item.active .nav-label { color: var(--green); font-weight: 700; }
+.nav-item.active .nav-icon { transform: scale(1.15); }
+
+/* ═══════════════════════════════════════
+   QUIZ SCREEN
+═══════════════════════════════════════ */
+#quiz {
+  background: var(--cream);
+  position: relative;
+}
+
+.quiz-header {
+  padding: 20px 20px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: white;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.back-btn {
+  width: 36px; height: 36px;
+  background: var(--gray-light);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.quiz-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  flex: 1;
+}
+
+.quiz-counter {
+  font-size: 13px;
+  color: var(--gray);
+  font-weight: 500;
+}
+
+.quiz-progress-bar {
+  height: 3px;
+  background: #f0f0f0;
+  overflow: hidden;
+}
+
+.quiz-progress-fill {
+  height: 100%;
+  background: var(--green);
+  transition: width 0.4s ease;
+}
+
+.quiz-body {
+  flex: 1;
+  padding: 24px 20px;
+  overflow-y: auto;
+  padding-bottom: 100px;
+}
+
+.question-num {
+  font-size: 12px;
+  color: var(--gray);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+
+.question-text {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 1.4;
+  color: var(--dark);
+  margin-bottom: 28px;
+}
+
+.options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.option-btn {
+  background: white;
+  border: 2px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 16px 18px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 15px;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--dark);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.option-btn:hover:not(:disabled) {
+  border-color: var(--green);
+  background: #f0fdf4;
+}
+
+.option-letter {
+  width: 30px; height: 30px;
+  background: var(--gray-light);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700;
+  font-size: 13px;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+
+.option-btn.correct {
+  border-color: #16a34a;
+  background: #f0fdf4;
+}
+.option-btn.correct .option-letter {
+  background: #16a34a;
+  color: white;
+}
+
+.option-btn.wrong {
+  border-color: var(--red);
+  background: #fef2f2;
+}
+.option-btn.wrong .option-letter {
+  background: var(--red);
+  color: white;
+}
+
+/* Feedback card */
+.feedback-card {
+  margin-top: 20px;
+  border-radius: 16px;
+  padding: 18px;
+  animation: slideUp 0.3s ease;
+  display: none;
+}
+
+@keyframes slideUp {
+  from { opacity:0; transform: translateY(20px); }
+  to { opacity:1; transform: translateY(0); }
+}
+
+.feedback-card.correct-fb {
+  background: #f0fdf4;
+  border: 1px solid #86efac;
+}
+
+.feedback-card.wrong-fb {
+  background: #fef2f2;
+  border: 1px solid #fca5a5;
+}
+
+.feedback-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.feedback-text {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #374151;
+  margin-bottom: 12px;
+}
+
+.article-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--green);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.next-btn {
+  position: fixed;
+  bottom: 20px;
+  left: 20px; right: 20px;
+  background: var(--green);
+  color: white;
+  border: none;
+  padding: 18px;
+  border-radius: 14px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: none;
+}
+
+.next-btn:hover { background: #0d4f3a; }
+
+/* ═══════════════════════════════════════
+   RESULTS SCREEN
+═══════════════════════════════════════ */
+#results {
+  background: var(--green);
+  justify-content: center;
+  align-items: center;
+  padding: 40px 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.results-bg {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(201,168,76,0.2) 0%, transparent 60%);
+}
+
+.results-content {
+  position: relative; z-index: 1;
+  text-align: center;
+  width: 100%;
+}
+
+.score-ring {
+  width: 160px; height: 160px;
+  margin: 0 auto 28px;
+  position: relative;
+}
+
+.score-ring svg {
+  transform: rotate(-90deg);
+}
+
+.score-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.score-num {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 40px;
+  color: white;
+  line-height: 1;
+}
+
+.score-pct {
+  font-size: 14px;
+  color: rgba(255,255,255,0.6);
+}
+
+.results-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 28px;
+  color: white;
+  margin-bottom: 8px;
+}
+
+.results-subtitle {
+  color: rgba(255,255,255,0.7);
+  font-size: 14px;
+  margin-bottom: 32px;
+  line-height: 1.5;
+}
+
+.xp-earned {
+  background: var(--gold);
+  color: var(--green);
+  border-radius: 12px;
+  padding: 14px 20px;
+  margin-bottom: 24px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  display: inline-block;
+}
+
+.badge-earned {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-align: left;
+}
+
+.badge-icon { font-size: 40px; }
+.badge-text h4 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  color: var(--gold);
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+.badge-text p {
+  font-size: 12px;
+  color: rgba(255,255,255,0.65);
+  line-height: 1.4;
+}
+
+.results-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.btn-share-main {
+  background: var(--gold);
+  border: none;
+  color: var(--green);
+  padding: 17px;
+  border-radius: 14px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s;
+  width: 100%;
+  box-shadow: 0 4px 20px rgba(201,168,76,0.4);
+  letter-spacing: 0.3px;
+}
+.btn-share-main:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(201,168,76,0.5); }
+
+.btn-share {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: white;
+  padding: 14px;
+  border-radius: 12px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s;
+  width: 100%;
+}
+.btn-share:hover { background: rgba(255,255,255,0.2); }
+
+/* Results category pill */
+.results-category {
+  display: inline-block;
+  background: rgba(201,168,76,0.2);
+  border: 1px solid rgba(201,168,76,0.4);
+  color: var(--gold);
+  padding: 5px 16px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+/* ─── SHARE SHEET ─── */
+.share-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.65);
+  backdrop-filter: blur(8px);
+  z-index: 600;
+  display: flex; align-items: flex-end; justify-content: center;
+  animation: overlayIn 0.25s ease;
+}
+.share-overlay.hidden { display: none; }
+
+.share-sheet {
+  background: #ffffff;
+  border-radius: 28px 28px 0 0;
+  padding: 12px 20px 40px;
+  width: 100%; max-width: 480px;
+  animation: sheetUp 0.35s cubic-bezier(0.34,1.2,0.64,1);
+}
+
+.share-handle {
+  width: 40px; height: 4px;
+  background: #e5e7eb; border-radius: 100px;
+  margin: 0 auto 20px;
+}
+
+.share-sheet-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800; font-size: 18px;
+  color: var(--dark); margin-bottom: 4px;
+}
+
+.share-score-card {
+  background: var(--green);
+  border-radius: 16px;
+  padding: 16px 18px;
+  margin: 16px 0;
+  display: flex; align-items: center; gap: 14px;
+  position: relative; overflow: hidden;
+}
+.share-score-card::after {
+  content: '';
+  position: absolute; right:-20px; top:-20px;
+  width: 90px; height: 90px;
+  background: rgba(201,168,76,0.15);
+  border-radius: 50%;
+}
+.share-pct-badge {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  border: 3px solid var(--gold);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.share-pct-badge span {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800; font-size: 15px;
+  color: var(--gold);
+}
+.share-score-info h4 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700; font-size: 14px;
+  color: white; margin-bottom: 3px;
+}
+.share-score-info p {
+  font-size: 12px; color: rgba(255,255,255,0.65);
+  line-height: 1.4;
+}
+
+.share-copy-box {
+  background: var(--cream);
+  border: 1.5px dashed #d1d5db;
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 13px;
+  color: var(--gray);
+  line-height: 1.5;
+  margin-bottom: 16px;
+  position: relative;
+}
+.share-copy-btn {
+  position: absolute; top: 8px; right: 8px;
+  background: var(--green); color: white;
+  border: none; border-radius: 8px;
+  padding: 5px 10px; font-size: 11px;
+  font-weight: 600; cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.share-platforms-label {
+  font-size: 11px; font-weight: 600;
+  color: var(--gray); text-transform: uppercase;
+  letter-spacing: 1px; margin-bottom: 12px;
+}
+
+.share-platforms {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.platform-btn {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 6px;
+  background: var(--cream);
+  border: 1.5px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 12px 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+}
+.platform-btn:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(0,0,0,0.1); }
+.platform-icon { font-size: 26px; line-height: 1; }
+.platform-name { font-size: 10px; font-weight: 600; color: var(--gray); }
+
+/* Platform brand colours on hover */
+.platform-btn.whatsapp:hover { border-color: #25D366; background: #f0fdf4; }
+.platform-btn.twitter:hover  { border-color: #1DA1F2; background: #eff8ff; }
+.platform-btn.facebook:hover { border-color: #1877F2; background: #eff4ff; }
+.platform-btn.linkedin:hover { border-color: #0A66C2; background: #eff4ff; }
+.platform-btn.telegram:hover { border-color: #26A5E4; background: #eff8ff; }
+.platform-btn.instagram:hover{ border-color: #E1306C; background: #fff0f5; }
+.platform-btn.sms:hover      { border-color: #34c759; background: #f0fdf4; }
+.platform-btn.copy:hover     { border-color: var(--gold); background: #fffbeb; }
+
+.share-close-btn {
+  width: 100%; padding: 14px;
+  background: var(--gray-light);
+  border: none; border-radius: 12px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 600; font-size: 14px;
+  color: var(--gray); cursor: pointer;
+  transition: background 0.2s;
+}
+.share-close-btn:hover { background: #e5e7eb; }
+
+.btn-home {
+  background: var(--gold);
+  border: none;
+  color: var(--green);
+  padding: 16px;
+  border-radius: 12px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+/* ═══════════════════════════════════════
+   LEADERBOARD
+═══════════════════════════════════════ */
+#leaderboard {
+  background: var(--cream);
+  padding-bottom: 80px;
+}
+
+.lb-header {
+  background: var(--green);
+  padding: 24px 20px 40px;
+}
+
+.lb-header h2 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 26px;
+  color: white;
+  margin-bottom: 4px;
+}
+
+.lb-header p {
+  color: rgba(255,255,255,0.6);
+  font-size: 13px;
+}
+
+.tabs {
+  display: flex;
+  gap: 0;
+  background: rgba(255,255,255,0.1);
+  border-radius: 10px;
+  padding: 3px;
+  margin-top: 16px;
+}
+
+.tab {
+  flex: 1;
+  padding: 8px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.6);
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.tab.active {
+  background: white;
+  color: var(--green);
+}
+
+.lb-your-rank {
+  background: white;
+  margin: -20px 16px 0;
+  border-radius: 14px;
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-shadow: var(--shadow);
+  position: relative; z-index: 2;
+  margin-bottom: 20px;
+  border: 2px solid var(--gold);
+}
+
+.lb-your-rank .rank-badge {
+  background: var(--gold);
+  color: var(--green);
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 16px;
+}
+
+.lb-your-rank .rank-info h4 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--dark);
+}
+
+.lb-your-rank .rank-info p {
+  font-size: 12px;
+  color: var(--gray);
+}
+
+.lb-list {
+  padding: 0 16px;
+}
+
+.lb-item {
+  background: white;
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+  transition: transform 0.2s;
+}
+
+.lb-item:hover { transform: translateX(4px); }
+
+.lb-rank {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 16px;
+  width: 28px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.lb-rank.gold { color: #f59e0b; }
+.lb-rank.silver { color: #94a3b8; }
+.lb-rank.bronze { color: #cd7c2f; }
+
+.lb-avatar {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+.lb-info { flex: 1; }
+.lb-name {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--dark);
+}
+
+.lb-level {
+  font-size: 11px;
+  color: var(--gray);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 2px;
+}
+
+.lb-xp {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--green);
+}
+
+/* ═══════════════════════════════════════
+   ASK KATIBA
+═══════════════════════════════════════ */
+#ask {
+  background: var(--cream);
+  flex-direction: column;
+  padding-bottom: 80px;
+}
+
+.ask-header {
+  background: var(--green);
+  padding: 24px 20px;
+}
+
+.ask-header h2 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 22px;
+  color: white;
+  margin-bottom: 4px;
+}
+
+.ask-header p {
+  font-size: 13px;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.5;
+}
+
+.chat-messages {
+  flex: 1;
+  padding: 20px 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.message {
+  max-width: 85%;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity:0; transform: translateY(8px); }
+  to { opacity:1; transform: translateY(0); }
+}
+
+.message.bot { align-self: flex-start; }
+.message.user { align-self: flex-end; }
+
+.message-bubble {
+  padding: 14px 16px;
+  border-radius: 16px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.message.bot .message-bubble {
+  background: white;
+  border-bottom-left-radius: 4px;
+  box-shadow: var(--shadow);
+  color: var(--dark);
+}
+
+.message.user .message-bubble {
+  background: var(--green);
+  border-bottom-right-radius: 4px;
+  color: white;
+}
+
+.message-article {
+  margin-top: 10px;
+  background: #f0fdf4;
+  border-radius: 10px;
+  padding: 10px 12px;
+  border-left: 3px solid var(--green);
+  font-size: 12px;
+  color: var(--green);
+  font-weight: 600;
+}
+
+.message-meta {
+  font-size: 10px;
+  color: var(--gray);
+  margin-top: 4px;
+  padding: 0 4px;
+}
+
+.message.user .message-meta { text-align: right; }
+
+.quick-questions {
+  padding: 0 16px 16px;
+}
+
+.quick-label {
+  font-size: 12px;
+  color: var(--gray);
+  font-weight: 500;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.quick-btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.quick-btn {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+  padding: 8px 14px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: var(--dark);
+  font-family: 'DM Sans', sans-serif;
+}
+
+.quick-btn:hover {
+  border-color: var(--green);
+  background: #f0fdf4;
+  color: var(--green);
+}
+
+.ask-input-area {
+  padding: 12px 16px;
+  background: white;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+}
+
+.ask-input {
+  flex: 1;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-family: 'DM Sans', sans-serif;
+  resize: none;
+  max-height: 100px;
+  transition: border-color 0.2s;
+  color: var(--dark);
+}
+
+.ask-input:focus {
+  outline: none;
+  border-color: var(--green);
+}
+
+.ask-send {
+  width: 44px; height: 44px;
+  background: var(--green);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  color: white;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.ask-send:hover { background: #0d4f3a; }
+
+/* typing indicator */
+.typing {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  padding: 14px 16px;
+}
+
+.typing span {
+  width: 7px; height: 7px;
+  background: var(--gray);
+  border-radius: 50%;
+  animation: bounce 1.2s infinite;
+}
+
+.typing span:nth-child(2) { animation-delay: 0.2s; }
+.typing span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes bounce {
+  0%, 60%, 100% { transform: translateY(0); }
+  30% { transform: translateY(-8px); }
+}
+
+/* ═══════════════════════════════════════
+   PROFILE
+═══════════════════════════════════════ */
+#profile {
+  background: var(--cream);
+  padding-bottom: 80px;
+}
+
+.profile-header {
+  background: var(--green);
+  padding: 32px 20px 50px;
+  text-align: center;
+  position: relative;
+}
+
+.profile-avatar-lg {
+  width: 72px; height: 72px;
+  background: var(--gold);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 28px;
+  color: var(--green);
+  margin: 0 auto 12px;
+  border: 3px solid rgba(255,255,255,0.3);
+}
+
+.profile-name {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 22px;
+  color: white;
+  margin-bottom: 4px;
+}
+
+.profile-level-badge {
+  display: inline-block;
+  background: var(--gold);
+  color: var(--green);
+  padding: 4px 16px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.profile-stats {
+  background: white;
+  margin: -24px 16px 20px;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+  position: relative; z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  text-align: center;
+}
+
+.profile-stat-val {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 20px;
+  color: var(--green);
+}
+
+.profile-stat-lbl {
+  font-size: 10px;
+  color: var(--gray);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 2px;
+}
+
+.badges-section {
+  padding: 0 16px 24px;
+}
+
+.badges-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.badge-item {
+  background: white;
+  border-radius: 12px;
+  padding: 12px 8px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.badge-item.locked {
+  opacity: 0.3;
+  filter: grayscale(1);
+}
+
+.badge-emoji { font-size: 26px; margin-bottom: 4px; }
+
+.badge-nm {
+  font-size: 9px;
+  color: var(--gray);
+  font-weight: 600;
+  line-height: 1.3;
+  text-align: center;
+}
+
+/* Utility */
+.scrollable { overflow-y: auto; flex: 1; padding-bottom: 20px; }
+.hidden { display: none !important; }
+.text-center { text-align: center; }
+
+/* Confetti */
+.confetti-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+.confetti-piece {
+  position: absolute;
+  width: 8px; height: 8px;
+  border-radius: 2px;
+  animation: confettiFall 2s ease-in forwards;
+}
+
+@keyframes confettiFall {
+  0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 90px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--dark);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 600;
+  z-index: 999;
+  animation: toastIn 0.3s ease forwards;
+  white-space: nowrap;
+}
+
+@keyframes toastIn {
+  from { opacity:0; transform: translateX(-50%) translateY(10px); }
+  to { opacity:1; transform: translateX(-50%) translateY(0); }
+}
+
+/* Responsive max width */
+body { max-width: 480px; margin: 0 auto; }
+.bottom-nav { max-width: 480px; }
+.next-btn { max-width: 440px; }
+
+/* ═══════════════════════════════════════
+   PROFILE GATE MODAL
+═══════════════════════════════════════ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 61, 46, 0.75);
+  backdrop-filter: blur(6px);
+  z-index: 500;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  animation: overlayIn 0.3s ease forwards;
+}
+
+@keyframes overlayIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal-overlay.hidden { display: none; }
+
+.profile-gate {
+  background: var(--white);
+  border-radius: 28px 28px 0 0;
+  padding: 12px 24px 40px;
+  width: 100%;
+  max-width: 480px;
+  animation: sheetUp 0.4s cubic-bezier(0.34, 1.2, 0.64, 1) forwards;
+  max-height: 92vh;
+  overflow-y: auto;
+}
+
+@keyframes sheetUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.sheet-handle {
+  width: 40px; height: 4px;
+  background: #e5e7eb;
+  border-radius: 100px;
+  margin: 0 auto 20px;
+}
+
+.gate-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 6px;
+}
+
+.gate-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 22px;
+  color: var(--dark);
+  line-height: 1.2;
+  flex: 1;
+}
+
+.gate-skip {
+  background: none;
+  border: none;
+  color: var(--gray);
+  font-size: 13px;
+  cursor: pointer;
+  padding: 4px 0 4px 16px;
+  font-family: 'DM Sans', sans-serif;
+  white-space: nowrap;
+  text-decoration: underline;
+  flex-shrink: 0;
+}
+
+.gate-subtitle {
+  font-size: 13px;
+  color: var(--gray);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.privacy-notice {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-bottom: 22px;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.privacy-notice span {
+  font-size: 12px;
+  color: #166534;
+  line-height: 1.5;
+}
+
+.gate-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.gate-field label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--gray);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+
+.gate-field input,
+.gate-field select {
+  width: 100%;
+  padding: 13px 16px;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 15px;
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--dark);
+  transition: border-color 0.2s;
+}
+
+.gate-field input:focus,
+.gate-field select:focus {
+  outline: none;
+  border-color: var(--green);
+  background: white;
+}
+
+.gender-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.gender-btn {
+  padding: 10px 8px;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  background: var(--cream);
+  font-size: 13px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: center;
+  color: var(--dark);
+}
+
+.gender-btn:hover {
+  border-color: var(--green);
+  background: #f0fdf4;
+}
+
+.gender-btn.selected {
+  border-color: var(--green);
+  background: var(--green);
+  color: white;
+}
+
+.gate-cta {
+  background: var(--green);
+  color: white;
+  border: none;
+  width: 100%;
+  padding: 17px;
+  border-radius: 14px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 10px;
+}
+
+.gate-cta:hover { background: #0d4f3a; }
+
+.gate-results-preview {
+  background: var(--green);
+  border-radius: 14px;
+  padding: 14px 18px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  position: relative;
+  overflow: hidden;
+}
+
+.gate-results-preview::after {
+  content: '';
+  position: absolute;
+  right: -15px; top: -15px;
+  width: 70px; height: 70px;
+  background: rgba(201,168,76,0.15);
+  border-radius: 50%;
+}
+
+.preview-score {
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  border: 3px solid rgba(255,255,255,0.3);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+.preview-score span {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 14px;
+  color: var(--gold);
+}
+
+.preview-text h4 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: white;
+  margin-bottom: 2px;
+}
+
+.preview-text p {
+  font-size: 12px;
+  color: rgba(255,255,255,0.6);
+}
+
+/* Profile complete indicator on home */
+.profile-complete-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255,255,255,0.12);
+  border-radius: 100px;
+  padding: 4px 10px;
+  font-size: 11px;
+  color: rgba(255,255,255,0.8);
+  margin-top: 6px;
+}
+
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ SPLASH ═══════════════ -->
+<!-- ═══════════════ LANGUAGE SELECT ═══════════════ -->
+<div id="langSelect" class="screen active">
+  <div class="lang-bg"></div>
+  <div class="lang-pattern"></div>
+  <div class="lang-content">
+
+    <div class="lang-logo">U</div>
+    <div class="lang-app-name">Uongo<span>Zi</span></div>
+
+    <!-- Dynamic welcome message -->
+    <div class="welcome-msg" id="welcomeMsg">
+      <h2>Choose your language</h2>
+      <p>Select how you'd like to learn civics today</p>
+    </div>
+
+    <!-- Language cards -->
+    <div class="lang-cards">
+
+      <!-- English -->
+      <div class="lang-card" id="langCard-en" onclick="selectLang('en')">
+        <div class="lang-flag">🇬🇧</div>
+        <div class="lang-info">
+          <div class="lang-name">English</div>
+          <div class="lang-desc">Full experience • All features available</div>
+        </div>
+        <div class="lang-check" id="langCheck-en"></div>
+      </div>
+
+      <!-- Swahili -->
+      <div class="lang-card" id="langCard-sw" onclick="selectLang('sw')">
+        <div class="lang-flag">🇰🇪</div>
+        <div class="lang-info">
+          <div class="lang-name">Kiswahili</div>
+          <div class="lang-desc">Uzoefu kamili • Vipengele vyote vipo</div>
+        </div>
+        <div class="lang-check" id="langCheck-sw"></div>
+      </div>
+
+      <!-- Sheng - Coming Soon -->
+      <div class="lang-card disabled" id="langCard-sheng" onclick="shengSoon()">
+        <div class="lang-flag">🤙</div>
+        <div class="lang-info">
+          <div class="lang-name">Sheng</div>
+          <div class="lang-desc">Tukiwa tayari • Ukisubiri kidogo tu...</div>
+        </div>
+        <div class="lang-check" id="langCheck-sheng"></div>
+        <div class="coming-soon-tag">Coming Soon</div>
+      </div>
+
+    </div>
+
+    <!-- CTA -->
+    <button class="lang-cta" id="langCta" onclick="confirmLang()">
+      <span class="lang-cta-text" id="langCtaText">Select a language to continue</span>
+    </button>
+
+  </div>
+  <div class="flag-strip"></div>
+</div>
+
+<div id="splash" class="screen">
+  <div class="splash-bg"></div>
+  <div class="splash-pattern"></div>
+  <div class="splash-content">
+    <div class="logo-mark">U</div>
+    <div class="splash-title">Uongo<span>Zi</span></div>
+    <div class="splash-tagline">Know Your Constitution 🇰🇪</div>
+    <div class="splash-meaning">
+      <p><strong>"Uongozi"</strong> — Leadership in Swahili<br>
+      <strong>"Uongo"</strong> — Lies in Swahili<br>
+      <strong>UongoZi</strong> — No to lies. Yes to leadership.</p>
+    </div>
+    <button class="btn-primary" onclick="goToHome()">Get Started Free</button>
+    <button class="btn-secondary" onclick="loginGuest()">Continue as Guest</button>
+  </div>
+  <div class="flag-strip"></div>
+</div>
+
+<!-- ═══════════════ ONBOARDING ═══════════════ -->
+<div id="onboarding" class="screen">
+  <div style="background:var(--green); padding:20px 20px 16px; display:flex; align-items:center; gap:12px;">
+    <button class="back-btn" onclick="showScreen('splash')" style="background:rgba(255,255,255,0.15);">←</button>
+    <div style="font-family:'Syne',sans-serif; font-weight:700; font-size:16px; color:white;">Create Profile</div>
+  </div>
+  <div style="flex:1; padding:32px 24px; overflow-y:auto;">
+    <div class="onboard-header">
+      <h2>Karibu! 👋</h2>
+      <p>Tell us about yourself to personalize your civic education journey</p>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Your Name / Nickname</label>
+      <input type="text" class="form-input" id="userName" placeholder="e.g. Njagi, Wanjiku, John...">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Age Group</label>
+      <select class="form-select" id="userAge">
+        <option value="">Select age group</option>
+        <option value="18-24">18–24</option>
+        <option value="25-34">25–34</option>
+        <option value="35-44">35–44</option>
+        <option value="45+">45+</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">County</label>
+      <select class="form-select" id="userCounty">
+        <option value="">Select county</option>
+        <option>Nairobi</option><option>Mombasa</option><option>Kisumu</option>
+        <option>Nakuru</option><option>Eldoret / Uasin Gishu</option>
+        <option>Kajiado</option><option>Kiambu</option><option>Machakos</option>
+        <option>Nyeri</option><option>Meru</option><option>Other</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Language Preference</label>
+      <select class="form-select" id="userLang">
+        <option value="en">English</option>
+        <option value="sw">Kiswahili</option>
+        <option value="both">Both</option>
+      </select>
+    </div>
+    <div style="margin-top:32px;">
+      <button class="btn-primary" style="color:var(--green); background:var(--gold); max-width:100%; width:100%;" onclick="completeOnboarding()">Start Learning 🎯</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ HOME ═══════════════ -->
+<div id="home" class="screen">
+  <div class="home-header">
+    <div class="home-header-bg"></div>
+    <div class="header-top">
+      <div class="header-logo">Uongo<span>Zi</span></div>
+      <div class="header-avatar" id="headerAvatar" onclick="showNav('profile')">N</div>
+    </div>
+    <div class="user-greeting">
+      <p>Habari, <span id="greetingName">Mzalendo</span>! 🇰🇪</p>
+      <h2 id="userLevelDisplay">Level 1: Mwanzo</h2>
+      <div class="xp-bar-container">
+        <div class="xp-bar-fill" id="xpBarFill" style="width:15%"></div>
+      </div>
+      <div class="xp-label">
+        <span>XP: <strong id="xpDisplay">15</strong></span>
+        <span>Next level: <strong>100 XP</strong></span>
+      </div>
+      <div class="profile-complete-badge" id="profileStatusBadge" style="display:none;">
+        ✅ Profile saved
+      </div>
+      <div class="lang-badge" id="langBadge" onclick="changeLang()" title="Change language">
+        <span id="langBadgeFlag">🇬🇧</span>
+        <span id="langBadgeLabel">EN</span>
+        <span style="opacity:0.5;">↻</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="scrollable">
+    <div class="stats-strip">
+      <div class="stat-card">
+        <div class="stat-value" id="statStreak">1</div>
+        <div class="stat-label">🔥 Day Streak</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="statAnswered">3</div>
+        <div class="stat-label">✅ Answered</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="statBadges">0</div>
+        <div class="stat-label">🏆 Badges</div>
+      </div>
+    </div>
+
+    <div class="streak-banner">
+      <div class="streak-num">🔥 1</div>
+      <div>
+        <div class="streak-text" style="font-weight:700;">Day Streak!</div>
+        <div style="font-size:11px; color:rgba(255,255,255,0.8);">Keep learning daily to earn bonus XP</div>
+      </div>
+    </div>
+
+    <!-- Ask Katiba CTA -->
+    <div class="katiba-cta" onclick="showNav('ask')">
+      <div class="katiba-cta-bg"></div>
+      <div class="katiba-cta-icon">📖</div>
+      <div class="katiba-cta-text">
+        <h3>Ask the Constitution</h3>
+        <p>Get instant answers from Kenya's Katiba 2010 in plain language</p>
+      </div>
+      <div style="color:var(--gold); font-size:18px; position:relative; z-index:1;">→</div>
+    </div>
+
+    <!-- Categories -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-title">Quiz Categories</div>
+        <div class="section-link">5 topics</div>
+      </div>
+      <div class="categories-grid">
+        <div class="category-card" onclick="startQuiz('rights')" style="border-color:transparent;">
+          <div class="category-icon" style="background:var(--rights-bg);">🛡️</div>
+          <div class="category-name">Basic Rights & Freedoms</div>
+          <div class="category-sw">Haki Zangu</div>
+          <div class="category-progress">
+            <div class="category-progress-fill" style="width:20%; background:var(--rights);"></div>
+          </div>
+          <div class="category-questions">6/30 questions</div>
+        </div>
+        <div class="category-card" onclick="startQuiz('voting')" style="border-color:transparent;">
+          <div class="category-icon" style="background:var(--voting-bg);">🗳️</div>
+          <div class="category-name">Elections & Voting</div>
+          <div class="category-sw">Kura Yangu</div>
+          <div class="category-progress">
+            <div class="category-progress-fill" style="width:0%; background:var(--voting);"></div>
+          </div>
+          <div class="category-questions">0/30 questions</div>
+        </div>
+        <div class="category-card" onclick="startQuiz('govt')" style="border-color:transparent;">
+          <div class="category-icon" style="background:var(--govt-bg);">🏛️</div>
+          <div class="category-name">How Government Works</div>
+          <div class="category-sw">Serikali Inafanyaje</div>
+          <div class="category-progress">
+            <div class="category-progress-fill" style="width:0%; background:var(--govt);"></div>
+          </div>
+          <div class="category-questions">0/30 questions</div>
+        </div>
+        <div class="category-card" onclick="startQuiz('budget')" style="border-color:transparent;">
+          <div class="category-icon" style="background:var(--budget-bg);">💰</div>
+          <div class="category-name">Public Budgeting</div>
+          <div class="category-sw">Pesa ya Umma</div>
+          <div class="category-progress">
+            <div class="category-progress-fill" style="width:0%; background:var(--budget);"></div>
+          </div>
+          <div class="category-questions">0/30 questions</div>
+        </div>
+        <div class="category-card" onclick="startQuiz('katiba')" style="border-color:transparent; grid-column: span 2;">
+          <div style="display:flex; align-items:center; gap:14px;">
+            <div class="category-icon" style="background:var(--katiba-bg); margin-bottom:0;">📜</div>
+            <div>
+              <div class="category-name">The Constitution of Kenya</div>
+              <div class="category-sw">Katiba Yangu • Bonus Category</div>
+            </div>
+          </div>
+          <div class="category-progress" style="margin-top:12px;">
+            <div class="category-progress-fill" style="width:0%; background:var(--katiba);"></div>
+          </div>
+          <div class="category-questions">0/25 questions</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="height: 80px;"></div>
+  </div>
+
+  <!-- Bottom Nav -->
+  <nav class="bottom-nav">
+    <div class="nav-item active" onclick="showNav('home')">
+      <span class="nav-icon">🏠</span>
+      <span class="nav-label">Home</span>
+    </div>
+    <div class="nav-item" onclick="showNav('leaderboard')">
+      <span class="nav-icon">🏆</span>
+      <span class="nav-label">Ranks</span>
+    </div>
+    <div class="nav-item" onclick="showNav('ask')">
+      <span class="nav-icon">📖</span>
+      <span class="nav-label">Ask Katiba</span>
+    </div>
+    <div class="nav-item" onclick="showNav('profile')">
+      <span class="nav-icon">👤</span>
+      <span class="nav-label">Profile</span>
+    </div>
+  </nav>
+</div>
+
+<!-- ═══════════════ QUIZ ═══════════════ -->
+<div id="quiz" class="screen">
+  <div class="quiz-header">
+    <button class="back-btn" onclick="showNav('home')">←</button>
+    <div class="quiz-title" id="quizTitle">Rights & Freedoms</div>
+    <div class="quiz-counter" id="quizCounter">1 / 5</div>
+  </div>
+  <div class="quiz-progress-bar">
+    <div class="quiz-progress-fill" id="quizProgressFill" style="width:20%"></div>
+  </div>
+  <div class="quiz-body" id="quizBody">
+    <!-- Rendered by JS -->
+  </div>
+  <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Next Question →</button>
+</div>
+
+<!-- ═══════════════ RESULTS ═══════════════ -->
+<div id="results" class="screen">
+  <div class="results-bg"></div>
+  <div class="results-content">
+    <div class="score-ring">
+      <svg width="160" height="160" viewBox="0 0 160 160">
+        <circle cx="80" cy="80" r="68" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="12"/>
+        <circle cx="80" cy="80" r="68" fill="none" stroke="#c9a84c" stroke-width="12"
+          stroke-dasharray="427" id="scoreArc" stroke-dashoffset="427" stroke-linecap="round"/>
+      </svg>
+      <div class="score-center">
+        <div class="score-num" id="scoreNum">0%</div>
+        <div class="score-pct" id="scoreRaw">0/0</div>
+      </div>
+    </div>
+    <div class="results-title" id="resultsTitle">Well Done! 🎉</div>
+    <div class="results-category" id="resultsCategory">Basic Rights &amp; Freedoms</div>
+    <div class="results-subtitle" id="resultsSubtitle">You answered 4 out of 5 questions correctly</div>
+    <div class="xp-earned" id="xpEarned">+40 XP Earned! ⚡</div>
+    <div class="badge-earned" id="badgeEarned">
+      <div class="badge-icon">🛡️</div>
+      <div class="badge-text">
+        <h4>Haki Defender Badge Unlocked!</h4>
+        <p>You're learning your rights. Keep going to master civic knowledge</p>
+      </div>
+    </div>
+    <div class="results-actions">
+      <button class="btn-share-main" onclick="openShareSheet()">📤 Share Your Score</button>
+      <button class="btn-share" onclick="startQuiz(currentCategory)">🔄 Try Again</button>
+      <button class="btn-home" onclick="showNav('home')">← Back to Home</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ LEADERBOARD ═══════════════ -->
+<div id="leaderboard" class="screen">
+  <div class="lb-header">
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+      <button class="back-btn" onclick="showNav('home')" style="background:rgba(255,255,255,0.15); color:white;">←</button>
+      <div>
+        <h2 style="margin:0;">Leaderboard 🏆</h2>
+        <p style="margin:0;">Top civic champions this week</p>
+      </div>
+    </div>
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab(this,'weekly')">Weekly</div>
+      <div class="tab" onclick="switchTab(this,'monthly')">Monthly</div>
+      <div class="tab" onclick="switchTab(this,'alltime')">All Time</div>
+    </div>
+  </div>
+  <div class="scrollable" style="padding-top:0;">
+    <div class="lb-your-rank">
+      <div class="rank-badge" id="yourRankBadge">#12</div>
+      <div class="rank-info">
+        <h4 id="yourRankName">You</h4>
+        <p id="yourRankLevel">Level 1 • Mwanzo</p>
+      </div>
+      <div class="lb-xp" id="yourRankXP">15 XP</div>
+    </div>
+    <div class="lb-list" id="lbList">
+      <!-- Rendered by JS -->
+    </div>
+    <div style="height:20px;"></div>
+  </div>
+  <nav class="bottom-nav">
+    <div class="nav-item" onclick="showNav('home')">
+      <span class="nav-icon">🏠</span><span class="nav-label">Home</span>
+    </div>
+    <div class="nav-item active" onclick="showNav('leaderboard')">
+      <span class="nav-icon">🏆</span><span class="nav-label">Ranks</span>
+    </div>
+    <div class="nav-item" onclick="showNav('ask')">
+      <span class="nav-icon">📖</span><span class="nav-label">Ask Katiba</span>
+    </div>
+    <div class="nav-item" onclick="showNav('profile')">
+      <span class="nav-icon">👤</span><span class="nav-label">Profile</span>
+    </div>
+  </nav>
+</div>
+
+<!-- ═══════════════ ASK KATIBA ═══════════════ -->
+<div id="ask" class="screen">
+  <div class="ask-header">
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+      <button class="back-btn" onclick="showNav('home')" style="background:rgba(255,255,255,0.15); color:white; border:none;">←</button>
+      <div>
+        <h2 style="margin:0;">Ask the Constitution</h2>
+        <p style="margin:0;">Katiba 2010 explained in plain language</p>
+      </div>
+    </div>
+  </div>
+  <div class="chat-messages" id="chatMessages">
+    <div class="message bot">
+      <div class="message-bubble">
+        Habari! 👋 I'm your Katiba guide. Ask me anything about Kenya's Constitution 2010, your rights, or how government works. I'll explain it in simple, clear language — in English or Kiswahili!
+        <div class="message-article">📖 Based on the Constitution of Kenya, 2010</div>
+      </div>
+      <div class="message-meta">Katiba AI • Just now</div>
+    </div>
+  </div>
+  <div class="quick-questions">
+    <div class="quick-label">Quick Questions</div>
+    <div class="quick-btns">
+      <button class="quick-btn" onclick="askQuestion('What are my rights if police arrest me?')">🚔 Arrest rights</button>
+      <button class="quick-btn" onclick="askQuestion('How many MPs does Kenya have?')">🏛️ MPs count</button>
+      <button class="quick-btn" onclick="askQuestion('What is devolution?')">🗺️ Devolution</button>
+      <button class="quick-btn" onclick="askQuestion('What does Article 10 say?')">📜 Article 10</button>
+      <button class="quick-btn" onclick="askQuestion('How do I report corruption?')">🔍 Report corruption</button>
+    </div>
+  </div>
+  <div class="ask-input-area">
+    <textarea class="ask-input" id="askInput" placeholder="Ask anything about the Kenyan Constitution..." rows="1"
+      onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendQuestion();}"></textarea>
+    <button class="ask-send" onclick="sendQuestion()">↑</button>
+  </div>
+  <nav class="bottom-nav">
+    <div class="nav-item" onclick="showNav('home')">
+      <span class="nav-icon">🏠</span><span class="nav-label">Home</span>
+    </div>
+    <div class="nav-item" onclick="showNav('leaderboard')">
+      <span class="nav-icon">🏆</span><span class="nav-label">Ranks</span>
+    </div>
+    <div class="nav-item active" onclick="showNav('ask')">
+      <span class="nav-icon">📖</span><span class="nav-label">Ask Katiba</span>
+    </div>
+    <div class="nav-item" onclick="showNav('profile')">
+      <span class="nav-icon">👤</span><span class="nav-label">Profile</span>
+    </div>
+  </nav>
+</div>
+
+<!-- ═══════════════ PROFILE ═══════════════ -->
+<div id="profile" class="screen">
+  <div class="profile-header">
+    <div style="display:flex; justify-content:flex-end; margin-bottom:16px;">
+      <button class="back-btn" onclick="showNav('home')" style="background:rgba(255,255,255,0.15); color:white; border:none;">←</button>
+    </div>
+    <div class="profile-avatar-lg" id="profileAvatarLg">N</div>
+    <div class="profile-name" id="profileName">Njagi</div>
+    <div style="color:rgba(255,255,255,0.6); font-size:13px; margin-bottom:10px;" id="profileCounty">Kajiado</div>
+    <div class="profile-level-badge" id="profileLevelBadge">Level 1: Mwanzo</div>
+  </div>
+  <div class="scrollable">
+    <div class="profile-stats">
+      <div>
+        <div class="profile-stat-val" id="pStatXP">15</div>
+        <div class="profile-stat-lbl">Total XP</div>
+      </div>
+      <div>
+        <div class="profile-stat-val" id="pStatAnswered">3</div>
+        <div class="profile-stat-lbl">Answered</div>
+      </div>
+      <div>
+        <div class="profile-stat-val" id="pStatStreak">1</div>
+        <div class="profile-stat-lbl">🔥 Streak</div>
+      </div>
+    </div>
+
+    <div class="badges-section">
+      <div class="section-header">
+        <div class="section-title">Your Badges</div>
+      </div>
+      <div class="badges-grid">
+        <div class="badge-item" id="badge-rights">
+          <div class="badge-emoji">🛡️</div>
+          <div class="badge-nm">Haki Defender</div>
+        </div>
+        <div class="badge-item locked" id="badge-voting">
+          <div class="badge-emoji">🗳️</div>
+          <div class="badge-nm">Democracy Champ</div>
+        </div>
+        <div class="badge-item locked" id="badge-govt">
+          <div class="badge-emoji">🏛️</div>
+          <div class="badge-nm">Bunge Star</div>
+        </div>
+        <div class="badge-item locked" id="badge-budget">
+          <div class="badge-emoji">💰</div>
+          <div class="badge-nm">Budget Watchdog</div>
+        </div>
+        <div class="badge-item locked" id="badge-katiba">
+          <div class="badge-emoji">📜</div>
+          <div class="badge-nm">Katiba Guardian</div>
+        </div>
+        <div class="badge-item locked" id="badge-streak">
+          <div class="badge-emoji">🔥</div>
+          <div class="badge-nm">7-Day Streak</div>
+        </div>
+        <div class="badge-item locked" id="badge-perfect">
+          <div class="badge-emoji">💯</div>
+          <div class="badge-nm">Perfect Score</div>
+        </div>
+        <div class="badge-item locked" id="badge-legend">
+          <div class="badge-emoji">🌍</div>
+          <div class="badge-nm">Civic Legend</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="padding: 0 16px 20px;">
+      <div class="section-title" style="margin-bottom:14px;">Settings</div>
+      <div style="background:white; border-radius:14px; overflow:hidden; box-shadow:var(--shadow);">
+        <div style="padding:16px 18px; border-bottom:1px solid #f0f0f0; display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="showToast('Language settings coming soon!')">
+          <span style="font-weight:500; font-size:14px;">🌐 Language</span>
+          <span style="font-size:13px; color:var(--gray);">English →</span>
+        </div>
+        <div style="padding:16px 18px; border-bottom:1px solid #f0f0f0; display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="showToast('Notifications settings coming soon!')">
+          <span style="font-weight:500; font-size:14px;">🔔 Notifications</span>
+          <span style="font-size:13px; color:var(--gray);">On →</span>
+        </div>
+        <div style="padding:16px 18px; display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="shareApp()">
+          <span style="font-weight:500; font-size:14px;">📤 Share UongoZi</span>
+          <span style="font-size:13px; color:var(--green);">Invite friends →</span>
+        </div>
+      </div>
+    </div>
+    <div style="height:80px;"></div>
+  </div>
+  <nav class="bottom-nav">
+    <div class="nav-item" onclick="showNav('home')">
+      <span class="nav-icon">🏠</span><span class="nav-label">Home</span>
+    </div>
+    <div class="nav-item" onclick="showNav('leaderboard')">
+      <span class="nav-icon">🏆</span><span class="nav-label">Ranks</span>
+    </div>
+    <div class="nav-item" onclick="showNav('ask')">
+      <span class="nav-icon">📖</span><span class="nav-label">Ask Katiba</span>
+    </div>
+    <div class="nav-item active" onclick="showNav('profile')">
+      <span class="nav-icon">👤</span><span class="nav-label">Profile</span>
+    </div>
+  </nav>
+</div>
+
+<!-- ═══════════════ PROFILE GATE MODAL ═══════════════ -->
+<div class="modal-overlay hidden" id="profileGateOverlay">
+  <div class="profile-gate" id="profileGateSheet">
+    <div class="sheet-handle"></div>
+
+    <!-- Blurred score preview teaser -->
+    <div class="gate-results-preview" id="gatePreview">
+      <div class="preview-score">
+        <span id="previewScore">?/?</span>
+      </div>
+      <div class="preview-text">
+        <h4>Your results are ready! 🎉</h4>
+        <p>One quick step before we reveal your score</p>
+      </div>
+    </div>
+
+    <div class="gate-header">
+      <div class="gate-title">Tell us a little about yourself</div>
+      <button class="gate-skip" onclick="skipProfileGate()">Skip →</button>
+    </div>
+    <p class="gate-subtitle">Help us understand who's learning civics in Kenya. Takes 20 seconds.</p>
+
+    <div class="privacy-notice">
+      <span>🔒</span>
+      <span><strong>Privacy first.</strong> We only collect a nickname — never your real name, phone number, or email. Your data helps improve civic education for all Kenyans.</span>
+    </div>
+
+    <div class="gate-fields">
+
+      <!-- Nickname -->
+      <div class="gate-field">
+        <label>Nickname (not your real name)</label>
+        <input type="text" id="gateNickname" placeholder="e.g. Mjanja254, WanjikuW, KajaladoBoss..." maxlength="20">
+      </div>
+
+      <!-- Age Range -->
+      <div class="gate-field">
+        <label>Age Range</label>
+        <select id="gateAge">
+          <option value="" disabled selected>Select your age range</option>
+          <option value="under-18">Under 18</option>
+          <option value="18-24">18 – 24</option>
+          <option value="25-34">25 – 34</option>
+          <option value="35-44">35 – 44</option>
+          <option value="45-54">45 – 54</option>
+          <option value="55+">55 and above</option>
+        </select>
+      </div>
+
+      <!-- Gender -->
+      <div class="gate-field">
+        <label>Gender</label>
+        <div class="gender-options">
+          <button class="gender-btn" onclick="selectGender(this, 'male')">♂ Male</button>
+          <button class="gender-btn" onclick="selectGender(this, 'female')">♀ Female</button>
+          <button class="gender-btn" onclick="selectGender(this, 'other')">⊕ Other</button>
+        </div>
+      </div>
+
+      <!-- County -->
+      <div class="gate-field">
+        <label>County</label>
+        <select id="gateCounty">
+          <option value="" disabled selected>Select your county</option>
+          <option>Baringo</option><option>Bomet</option><option>Bungoma</option>
+          <option>Busia</option><option>Elgeyo-Marakwet</option><option>Embu</option>
+          <option>Garissa</option><option>Homa Bay</option><option>Isiolo</option>
+          <option>Kajiado</option><option>Kakamega</option><option>Kericho</option>
+          <option>Kiambu</option><option>Kilifi</option><option>Kirinyaga</option>
+          <option>Kisii</option><option>Kisumu</option><option>Kitui</option>
+          <option>Kwale</option><option>Laikipia</option><option>Lamu</option>
+          <option>Machakos</option><option>Makueni</option><option>Mandera</option>
+          <option>Marsabit</option><option>Meru</option><option>Migori</option>
+          <option>Mombasa</option><option>Murang'a</option><option>Nairobi</option>
+          <option>Nakuru</option><option>Nandi</option><option>Narok</option>
+          <option>Nyamira</option><option>Nyandarua</option><option>Nyeri</option>
+          <option>Samburu</option><option>Siaya</option><option>Taita-Taveta</option>
+          <option>Tana River</option><option>Tharaka-Nithi</option><option>Trans Nzoia</option>
+          <option>Turkana</option><option>Uasin Gishu</option><option>Vihiga</option>
+          <option>Wajir</option><option>West Pokot</option>
+          <option value="diaspora">🌍 Kenyan Diaspora</option>
+        </select>
+      </div>
+
+    </div>
+
+    <button class="gate-cta" onclick="submitProfileGate()">See My Results 🎯</button>
+    <div style="text-align:center;">
+      <button class="gate-skip" onclick="skipProfileGate()" style="font-size:12px;">
+        No thanks, skip this step
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════
+let state = {
+  user: {
+    name: 'Mzalendo', nickname: '', county: 'Kenya',
+    age: '', gender: '', lang: 'en',
+    xp: 15, level: 1, streak: 1, answered: 3,
+    badges: ['rights'], profileCollected: false
+  },
+  quiz: { category: null, questions: [], current: 0, score: 0, answered: false },
+  pendingResults: null
+};
+
+
+
+
+let currentCategory = 'rights';
+
+// ═══════════════════════════════════════
+// QUIZ DATA
+// ═══════════════════════════════════════
+const quizData = {
+  rights: {
+    title: "Basic Rights & Freedoms",
+    color: "#16a34a",
+    icon: "🛡️",
+    questions: [
+      {
+        q: "Under Article 49 of Kenya's Constitution, when must you be informed of the reason for your arrest?",
+        options: ["Within 24 hours", "Promptly, at time of arrest", "Before you're taken to court", "When you request it"],
+        correct: 1,
+        explanation: "Article 49(1)(a) states that an arrested person has the right to be informed promptly of the reason for arrest, in a language they understand. This is immediate — not hours later.",
+        article: "Article 49 — Rights of Arrested Persons"
+      },
+      {
+        q: "How long can police hold you without charging you or presenting you to court?",
+        options: ["24 hours", "48 hours", "72 hours", "7 days"],
+        correct: 1,
+        explanation: "Article 49(1)(f) gives you the right to be released or brought before a court within 24 hours of arrest. If the arrest happens outside court hours, within 24 hours of the next court session.",
+        article: "Article 49(1)(f) — Right to appear before court"
+      },
+      {
+        q: "Article 33 of the Constitution protects your right to:",
+        options: ["Free healthcare", "Freedom of expression", "Free education", "Own property"],
+        correct: 1,
+        explanation: "Article 33 protects freedom of expression — the right to seek, receive, or impart information or ideas. This includes freedom of the press and of artistic creativity.",
+        article: "Article 33 — Freedom of Expression"
+      },
+      {
+        q: "Which article of Kenya's Constitution outlines the right to education?",
+        options: ["Article 40", "Article 43", "Article 50", "Article 27"],
+        correct: 1,
+        explanation: "Article 43(1)(f) guarantees every person the right to education. This is part of the economic and social rights — including health, housing, food, water and sanitation.",
+        article: "Article 43 — Economic and Social Rights"
+      },
+      {
+        q: "The right to protest and picket peacefully is protected under which Article?",
+        options: ["Article 36", "Article 37", "Article 38", "Article 39"],
+        correct: 1,
+        explanation: "Article 37 gives every person the right to assemble, demonstrate, picket, and present petitions to public authorities — as long as it's done peacefully.",
+        article: "Article 37 — Assembly, Demonstration, Picketing"
+      }
+    ]
+  },
+  voting: {
+    title: "Elections & Voting",
+    color: "#ea580c",
+    icon: "🗳️",
+    questions: [
+      {
+        q: "What is the minimum age to vote in Kenya's general elections?",
+        options: ["16 years", "18 years", "21 years", "25 years"],
+        correct: 1,
+        explanation: "Article 83 of the Constitution states that a person is eligible to vote if they are 18 years or older, is a Kenyan citizen, and is registered as a voter.",
+        article: "Article 83 — Qualifications for Voters"
+      },
+      {
+        q: "How often are general elections held in Kenya?",
+        options: ["Every 3 years", "Every 4 years", "Every 5 years", "Every 6 years"],
+        correct: 2,
+        explanation: "Article 101 of the Constitution states that a general election shall be held on the second Tuesday of August every five years.",
+        article: "Article 101 — Elections"
+      },
+      {
+        q: "What is the role of the IEBC (Independent Electoral and Boundaries Commission)?",
+        options: ["Making laws", "Conducting elections and referenda", "Judging election disputes", "Printing currency"],
+        correct: 1,
+        explanation: "The IEBC is established under Article 88 to conduct elections and referenda, register voters, settle electoral disputes at the constituency level, and regulate political parties.",
+        article: "Article 88 — Independent Electoral Commission"
+      },
+      {
+        q: "In a presidential election, what percentage of votes must the winner receive?",
+        options: ["More than 40%", "More than 50%", "More than 51%", "More than 60%"],
+        correct: 1,
+        explanation: "Article 138(4) requires the winning presidential candidate to receive more than half of all votes cast AND at least 25% of votes in at least 24 of Kenya's 47 counties.",
+        article: "Article 138 — Presidential Elections"
+      },
+      {
+        q: "What happens if no presidential candidate wins outright in the first round?",
+        options: ["The incumbent stays", "Parliament picks the winner", "A fresh election is held", "A runoff is held within 30 days"],
+        correct: 3,
+        explanation: "Article 138(5) states that if no candidate receives the required threshold, a fresh election must be held within 30 days between the top two candidates.",
+        article: "Article 138(5) — Presidential Runoff"
+      }
+    ]
+  },
+  govt: {
+    title: "How Government Works",
+    color: "#2563eb",
+    icon: "🏛️",
+    questions: [
+      {
+        q: "Kenya's Constitution establishes how many arms of government?",
+        options: ["Two", "Three", "Four", "Five"],
+        correct: 1,
+        explanation: "Article 1(3) establishes three arms: the Legislature (Parliament), the Executive (President + Cabinet), and the Judiciary (courts). This separation prevents any one branch from having too much power.",
+        article: "Article 1(3) — Sovereign Power"
+      },
+      {
+        q: "How many counties does Kenya have under the devolved system?",
+        options: ["40", "42", "47", "54"],
+        correct: 2,
+        explanation: "Kenya has 47 counties established under the Fourth Schedule of the Constitution. Each county has its own assembly, governor, and budget to bring services closer to the people.",
+        article: "Article 6 + Fourth Schedule — Devolution"
+      },
+      {
+        q: "What is the Senate's PRIMARY role in Kenya's Parliament?",
+        options: ["Passing the national budget", "Protecting county interests", "Appointing judges", "Declaring war"],
+        correct: 1,
+        explanation: "Article 96 states the Senate protects the interests of the counties and determines questions about county governments. It is NOT just a second chamber — it's specifically for devolution.",
+        article: "Article 96 — Role of the Senate"
+      },
+      {
+        q: "How many Members of the National Assembly are there?",
+        options: ["290", "350", "350+", "290+47+12"],
+        correct: 3,
+        explanation: "The National Assembly has 290 constituency representatives + 47 women representatives (one per county) + 12 nominated members = 349 total members (Article 97).",
+        article: "Article 97 — Composition of National Assembly"
+      },
+      {
+        q: "What does 'devolution' mean in Kenya's context?",
+        options: ["Removing powers from leaders", "Transferring power to counties", "Dissolving Parliament", "Federalism"],
+        correct: 1,
+        explanation: "Devolution (Chapter 11) transfers political, administrative and financial powers to county governments, ensuring services and decision-making are closer to citizens, not centralized in Nairobi.",
+        article: "Chapter 11 — Devolved Government"
+      }
+    ]
+  },
+  budget: {
+    title: "Public Budgeting",
+    color: "#7c3aed",
+    icon: "💰",
+    questions: [
+      {
+        q: "Who is responsible for preparing Kenya's national budget?",
+        options: ["The President", "The National Treasury", "Parliament", "The Auditor General"],
+        correct: 1,
+        explanation: "The National Treasury (Cabinet Secretary for Finance) prepares the budget. But Parliament must debate and approve it through the Appropriations Act under Article 221.",
+        article: "Article 221 — Budget Estimates"
+      },
+      {
+        q: "What percentage of national revenue must the national government share with counties?",
+        options: ["10%", "15%", "At least 15%", "25%"],
+        correct: 2,
+        explanation: "Article 203(2) requires that counties receive at least 15% of the most recently audited national revenue annually. In practice, this has been around 15-17% of audited revenues.",
+        article: "Article 203 — Equitable Share"
+      },
+      {
+        q: "What is the CDF (Constituency Development Fund) used for?",
+        options: ["MP salaries", "Constituency development projects", "National infrastructure", "Political campaigns"],
+        correct: 1,
+        explanation: "The CDF allocates funds directly to constituencies for local development projects — schools, roads, boreholes. Each MP oversees the fund for their constituency.",
+        article: "CDF Act, 2013"
+      },
+      {
+        q: "Which office is responsible for auditing government spending?",
+        options: ["National Treasury", "Ethics and Anti-Corruption Commission", "Office of the Auditor General", "Controller of Budget"],
+        correct: 2,
+        explanation: "The Auditor General (Article 229) audits government accounts and reports to Parliament. They check whether public money was used for its intended purpose and report misuse.",
+        article: "Article 229 — Auditor General"
+      },
+      {
+        q: "Citizens have the right to participate in budget processes under which principle?",
+        options: ["Article 10 — National Values", "Article 201 — Principles of Public Finance", "Article 35 — Access to Information", "All of the above"],
+        correct: 3,
+        explanation: "Article 201(a) and (d) establish public participation and financial transparency as core principles. Article 10 makes public participation a national value. Article 35 gives you the right to information.",
+        article: "Article 201 — Principles of Public Finance"
+      }
+    ]
+  },
+  katiba: {
+    title: "The Constitution of Kenya",
+    color: "#be185d",
+    icon: "📜",
+    questions: [
+      {
+        q: "In what year was Kenya's current Constitution promulgated?",
+        options: ["2008", "2009", "2010", "2012"],
+        correct: 2,
+        explanation: "Kenya's Constitution was promulgated on 27 August 2010 after being approved by 67% of voters in a referendum held on 4 August 2010. It replaced the 1969 Constitution.",
+        article: "Preamble — Constitution of Kenya 2010"
+      },
+      {
+        q: "What does Article 10 of the Constitution establish?",
+        options: ["The right to vote", "National values and principles of governance", "Freedom of movement", "Devolution"],
+        correct: 1,
+        explanation: "Article 10 lists Kenya's national values: patriotism, democracy, human dignity, equity, social justice, inclusiveness, equality, human rights, non-discrimination, and protection of the marginalized.",
+        article: "Article 10 — National Values and Principles"
+      },
+      {
+        q: "The Constitution declares that sovereignty belongs to:",
+        options: ["The President", "Parliament", "The People of Kenya", "The Constitution itself"],
+        correct: 2,
+        explanation: "Article 1(1) is clear: 'All sovereign power belongs to the people of Kenya.' The people exercise this power directly or through elected representatives.",
+        article: "Article 1 — Sovereignty of the People"
+      },
+      {
+        q: "How many chapters does Kenya's 2010 Constitution have?",
+        options: ["15", "18", "18 chapters + schedules", "22"],
+        correct: 2,
+        explanation: "The Constitution of Kenya 2010 has 18 chapters covering everything from the Bill of Rights, devolution, land, the environment, leadership, and finance.",
+        article: "Structure — Constitution of Kenya 2010"
+      },
+      {
+        q: "What percentage of referendum votes are needed to amend the Constitution?",
+        options: ["Simple majority (50%+1)", "Two-thirds of Parliament", "More than 50% of referendum voters", "Two-thirds in Parliament AND majority in referendum"],
+        correct: 3,
+        explanation: "Article 255 requires popular initiative amendments to be supported by two-thirds of Parliament AND approved by majority voters in a referendum. This protects the Constitution from easy changes.",
+        article: "Article 255 — Amendment of Constitution"
+      }
+    ]
+  }
+};
+
+// ═══════════════════════════════════════
+// KATIBA AI RESPONSES
+// ═══════════════════════════════════════
+const katibaAnswers = {
+  "arrest": {
+    answer: "If police arrest you, Article 49 gives you these rights immediately:\n\n• Be told WHY you're being arrested (in your language)\n• Remain silent (you don't have to answer questions)\n• Communicate with a lawyer of your choice\n• Not be compelled to make a confession\n• Be released or taken to court within 24 hours\n\nRemember: You can say 'Mimi nina haki ya kimya' (I have the right to remain silent).",
+    article: "Article 49 — Rights of Arrested Persons"
+  },
+  "mps": {
+    answer: "Kenya's National Assembly has 349 Members of Parliament:\n\n• 290 elected constituency representatives\n• 47 women representatives (one per county)\n• 12 nominated members\n\nThe Senate has 67 members:\n• 47 elected county senators\n• 16 nominated women\n• 2 youth representatives\n• 2 persons with disabilities",
+    article: "Article 97 & 98 — Composition of Parliament"
+  },
+  "devolution": {
+    answer: "Devolution means transferring power from central government in Nairobi to Kenya's 47 counties. Each county has:\n\n• An elected Governor (executive)\n• A County Assembly (legislature)\n• Its own budget (at least 15% of national revenue)\n• Power over local services: health, agriculture, roads\n\nThe goal: bring services and decisions closer to citizens, not centralize everything in Nairobi.",
+    article: "Chapter 11 — Devolved Government"
+  },
+  "article 10": {
+    answer: "Article 10 lists Kenya's National Values and Principles of Governance. ALL state organs and officers MUST apply these:\n\n• Patriotism and national unity\n• Sharing and devolution of power\n• Rule of law, democracy, participation\n• Human dignity, equity, social justice\n• Inclusiveness and non-discrimination\n• Good governance and integrity\n• Sustainable development\n\nThese bind everyone — from the President to your local MCA.",
+    article: "Article 10 — National Values and Principles"
+  },
+  "corruption": {
+    answer: "You can report corruption through:\n\n• Ethics and Anti-Corruption Commission (EACC): 0800 720 882 (free)\n• Director of Public Prosecutions (DPP)\n• Kenya Police (though for systemic corruption, EACC is better)\n• Your county assembly representative\n• Directly to the Auditor General for public funds misuse\n\nArticle 73 requires all public officials to maintain integrity. Article 232 demands financial transparency.",
+    article: "Article 73 & 232 — Integrity and Transparency"
+  }
+};
+
+function getKatibaAnswer(question) {
+  const q = question.toLowerCase();
+  if (q.includes('arrest') || q.includes('police') || q.includes('rights if')) return katibaAnswers['arrest'];
+  if (q.includes('mp') || q.includes('member') || q.includes('parliament') || q.includes('assembly')) return katibaAnswers['mps'];
+  if (q.includes('devolution') || q.includes('county')) return katibaAnswers['devolution'];
+  if (q.includes('article 10') || q.includes('national values')) return katibaAnswers['article 10'];
+  if (q.includes('corruption') || q.includes('report') || q.includes('bribery')) return katibaAnswers['corruption'];
+  return {
+    answer: "Great question! The Constitution of Kenya 2010 covers a wide range of rights and governance structures. For the most accurate answer, I recommend visiting:\n\n• kenyalaw.org — Full constitutional text\n• katibainstitute.org — Plain language guides\n\nOr try one of the quiz categories to learn more about this topic!",
+    article: "Constitution of Kenya, 2010"
+  };
+}
+
+// ═══════════════════════════════════════
+// LEADERBOARD DATA
+// ═══════════════════════════════════════
+const lbData = [
+  { name: "Wanjiku M.", level: "Mzalendo", xp: 2840, county: "Nairobi", color: "#f59e0b" },
+  { name: "Ochieng K.", level: "Kiongozi", xp: 1920, county: "Kisumu", color: "#6366f1" },
+  { name: "Aisha H.", level: "Kiongozi", xp: 1750, county: "Mombasa", color: "#ec4899" },
+  { name: "Kamau J.", level: "Mtetezi", xp: 980, county: "Nakuru", color: "#10b981" },
+  { name: "Fatuma A.", level: "Mtetezi", xp: 820, county: "Kajiado", color: "#f97316" },
+  { name: "Brian O.", level: "Mwelewa", xp: 540, county: "Eldoret", color: "#8b5cf6" },
+  { name: "Grace N.", level: "Mwelewa", xp: 420, county: "Kiambu", color: "#06b6d4" },
+  { name: "David M.", level: "Mwanafunzi", xp: 210, county: "Machakos", color: "#84cc16" },
+  { name: "Ruth W.", level: "Mwanafunzi", xp: 145, county: "Nyeri", color: "#f43f5e" },
+  { name: "Kevin L.", level: "Mwanafunzi", xp: 85, county: "Meru", color: "#a78bfa" },
+];
+
+const medals = ["🥇", "🥈", "🥉"];
+
+// ═══════════════════════════════════════
+// CORE NAVIGATION
+// ═══════════════════════════════════════
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function showNav(id) {
+  showScreen(id);
+  if (id === 'leaderboard') renderLeaderboard();
+  if (id === 'profile') updateProfile();
+}
+
+function loginGuest() {
+  state.user.name = 'Mzalendo';
+  updateUI();
+  showScreen('home');
+}
+
+function goToHome() {
+  showScreen('home');
+  setTimeout(() => showToast('Karibu! 🇰🇪 Take a quiz to get started'), 400);
+}
+
+function completeOnboarding() {
+  const name = document.getElementById('userName').value.trim();
+  if (!name) { showToast('Please enter your name! 😊'); return; }
+  state.user.name = name;
+  state.user.county = document.getElementById('userCounty').value || 'Kenya';
+  state.user.age = document.getElementById('userAge').value;
+  updateUI();
+  showScreen('home');
+  setTimeout(() => showToast(`Karibu ${name}! 🇰🇪 Let's learn!`), 300);
+}
+
+function updateUI() {
+  const initial = state.user.name.charAt(0).toUpperCase();
+  document.getElementById('headerAvatar').textContent = initial;
+  document.getElementById('greetingName').textContent = state.user.name;
+  const levels = ['Mwanzo','Mwanafunzi','Mwelewa','Mtetezi','Kiongozi','Mzalendo','Mlinzi wa Katiba'];
+  const xpThresholds = [0,100,300,600,1000,1500,2500];
+  let lvl = 0;
+  for (let i = xpThresholds.length-1; i >= 0; i--) {
+    if (state.user.xp >= xpThresholds[i]) { lvl = i; break; }
+  }
+  state.user.level = lvl + 1;
+  const nextXP = xpThresholds[lvl+1] || xpThresholds[xpThresholds.length-1];
+  const pct = Math.min(100, ((state.user.xp - xpThresholds[lvl]) / (nextXP - xpThresholds[lvl])) * 100);
+  document.getElementById('userLevelDisplay').textContent = `Level ${state.user.level}: ${levels[lvl]}`;
+  // Show profile completion status
+  const profileBadge = document.getElementById('profileStatusBadge');
+  if (profileBadge) {
+    if (state.user.profileCollected && state.user.nickname) {
+      profileBadge.textContent = '✅ Profile saved • ' + state.user.county;
+      profileBadge.style.display = 'inline-flex';
+    } else {
+      profileBadge.style.display = 'none';
+    }
+  }
+  document.getElementById('xpBarFill').style.width = pct + '%';
+  document.getElementById('xpDisplay').textContent = state.user.xp;
+  document.getElementById('statStreak').textContent = state.user.streak;
+  document.getElementById('statAnswered').textContent = state.user.answered;
+  document.getElementById('statBadges').textContent = state.user.badges.length;
+}
+
+// ═══════════════════════════════════════
+// QUIZ ENGINE
+// ═══════════════════════════════════════
+function startQuiz(category) {
+  currentCategory = category;
+  const data = quizData[category];
+  state.quiz = {
+    category,
+    questions: [...data.questions],
+    current: 0,
+    score: 0,
+    answered: false
+  };
+  document.getElementById('quizTitle').textContent = data.title;
+  renderQuestion();
+  showScreen('quiz');
+}
+
+function renderQuestion() {
+  const q = state.quiz.questions[state.quiz.current];
+  const total = state.quiz.questions.length;
+  const curr = state.quiz.current + 1;
+  document.getElementById('quizCounter').textContent = `${curr} / ${total}`;
+  document.getElementById('quizProgressFill').style.width = (curr/total*100) + '%';
+  document.getElementById('nextBtn').style.display = 'none';
+  state.quiz.answered = false;
+
+  const letters = ['A','B','C','D'];
+  document.getElementById('quizBody').innerHTML = `
+    <div class="question-num">Question ${curr} of ${total}</div>
+    <div class="question-text">${q.q}</div>
+    <div class="options-list">
+      ${q.options.map((opt,i) => `
+        <button class="option-btn" onclick="selectAnswer(${i})" id="opt-${i}">
+          <span class="option-letter">${letters[i]}</span>
+          <span>${opt}</span>
+        </button>
+      `).join('')}
+    </div>
+    <div class="feedback-card" id="feedbackCard"></div>
+  `;
+}
+
+function selectAnswer(idx) {
+  if (state.quiz.answered) return;
+  state.quiz.answered = true;
+  state.user.answered++;
+
+  const q = state.quiz.questions[state.quiz.current];
+  const isCorrect = idx === q.correct;
+  const xpGained = isCorrect ? (idx === q.correct ? 15 : 10) : 0;
+
+  if (isCorrect) {
+    state.quiz.score++;
+    state.user.xp += xpGained;
+    document.getElementById(`opt-${idx}`).classList.add('correct');
+    showConfetti();
+  } else {
+    document.getElementById(`opt-${idx}`).classList.add('wrong');
+    document.getElementById(`opt-${q.correct}`).classList.add('correct');
+  }
+
+  // Disable all options
+  document.querySelectorAll('.option-btn').forEach(btn => btn.disabled = true);
+
+  // Show feedback
+  const fb = document.getElementById('feedbackCard');
+  fb.style.display = 'block';
+  fb.className = `feedback-card ${isCorrect ? 'correct-fb' : 'wrong-fb'}`;
+  fb.innerHTML = `
+    <div class="feedback-title">
+      ${isCorrect ? '✅ Correct!' : '❌ Not quite!'}
+      ${isCorrect ? `<span style="color:var(--green); font-size:13px;">+${xpGained} XP</span>` : ''}
+    </div>
+    <div class="feedback-text">${q.explanation}</div>
+    <div class="article-tag">📜 ${q.article}</div>
+  `;
+
+  document.getElementById('nextBtn').style.display = 'block';
+  document.getElementById('nextBtn').textContent =
+    state.quiz.current < state.quiz.questions.length - 1 ? 'Next Question →' : 'See Results 🎉';
+
+  updateUI();
+}
+
+function nextQuestion() {
+  if (state.quiz.current < state.quiz.questions.length - 1) {
+    state.quiz.current++;
+    renderQuestion();
+    window.scrollTo(0, 0);
+  } else {
+    // Last question answered — gate check before results
+    if (!state.user.profileCollected) {
+      openProfileGate();
+    } else {
+      showResults();
+    }
+  }
+}
+
+// ═══════════════════════════════════════
+// PROFILE GATE
+// ═══════════════════════════════════════
+let selectedGender = '';
+
+function openProfileGate() {
+  const total = state.quiz.questions.length;
+  const score = state.quiz.score;
+  document.getElementById('previewScore').textContent = score + '/' + total;
+  document.getElementById('profileGateOverlay').classList.remove('hidden');
+  // Reset fields
+  document.getElementById('gateNickname').value = '';
+  document.getElementById('gateAge').value = '';
+  document.getElementById('gateCounty').value = '';
+  selectedGender = '';
+  document.querySelectorAll('.gender-btn').forEach(b => b.classList.remove('selected'));
+}
+
+function selectGender(btn, val) {
+  selectedGender = val;
+  document.querySelectorAll('.gender-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+
+function submitProfileGate() {
+  const nickname = document.getElementById('gateNickname').value.trim();
+  const age = document.getElementById('gateAge').value;
+  const county = document.getElementById('gateCounty').value;
+
+  if (!nickname) { showToast('Please enter a nickname 😊'); return; }
+  if (!age) { showToast('Please select your age range'); return; }
+  if (!county) { showToast('Please select your county'); return; }
+  if (!selectedGender) { showToast('Please select your gender'); return; }
+
+  // Save to state
+  state.user.nickname = nickname;
+  state.user.name = nickname;
+  state.user.age = age;
+  state.user.county = county;
+  state.user.gender = selectedGender;
+  state.user.profileCollected = true;
+
+  // Update avatar
+  const initial = nickname.charAt(0).toUpperCase();
+  document.getElementById('headerAvatar').textContent = initial;
+  document.getElementById('greetingName').textContent = nickname;
+
+  closeProfileGate();
+  updateUI();
+  showToast('Profile saved! Here are your results 🎉');
+  setTimeout(() => showResults(), 400);
+}
+
+function skipProfileGate() {
+  state.user.profileCollected = true; // don't ask again this session
+  closeProfileGate();
+  showResults();
+}
+
+function closeProfileGate() {
+  document.getElementById('profileGateOverlay').classList.add('hidden');
+}
+
+function showResults() {
+  const total = state.quiz.questions.length;
+  const score = state.quiz.score;
+  const pct = Math.round((score / total) * 100);
+  const xpEarned = score * 10 + (pct === 100 ? 50 : 0);
+  state.user.xp += (pct === 100 ? 50 : 0);
+
+  const titles = {
+    0:   ["Keep Trying! 💪", "Don't give up — knowledge takes practice."],
+    40:  ["Good Start! 🌱", "You're learning. Keep going to earn your badge!"],
+    60:  ["Nice Work! 👏", "You know your rights better than most Kenyans!"],
+    80:  ["Excellent! 🎉", "You're a civic champion — share your score!"],
+    100: ["PERFECT! 🏆", "100%! You know this topic inside out. Incredible!"]
+  };
+
+  let titleKey = 0;
+  if (pct >= 100) titleKey = 100;
+  else if (pct >= 80) titleKey = 80;
+  else if (pct >= 60) titleKey = 60;
+  else if (pct >= 40) titleKey = 40;
+
+  // Percentage display
+  document.getElementById('scoreNum').textContent = pct + '%';
+  document.getElementById('scoreRaw').textContent = score + ' / ' + total + ' correct';
+  // Category label
+  const catTitle = quizData[currentCategory] ? quizData[currentCategory].title : '';
+  const catIcon  = quizData[currentCategory] ? quizData[currentCategory].icon  : '';
+  document.getElementById('resultsCategory').textContent = catIcon + ' ' + catTitle;
+  document.getElementById('resultsTitle').textContent = titles[titleKey][0];
+  document.getElementById('resultsSubtitle').textContent =
+    titles[titleKey][1] + '\nYou answered ' + score + ' out of ' + total + ' questions correctly.';
+  document.getElementById('xpEarned').textContent = '+' + xpEarned + ' XP Earned! ⚡';
+
+  const arc = document.getElementById('scoreArc');
+  const circumference = 427;
+  setTimeout(() => {
+    arc.style.transition = 'stroke-dashoffset 1.5s ease';
+    arc.style.strokeDashoffset = circumference - (circumference * pct / 100);
+  }, 300);
+
+  const categoryBadges = {
+    rights: {icon: '🛡️', name: 'Haki Defender',      desc: "You're learning your constitutional rights!"},
+    voting: {icon: '🗳️', name: 'Democracy Champion',  desc: "You understand Kenya's electoral process!"},
+    govt:   {icon: '🏛️', name: 'Bunge Star',          desc: "You understand how Kenya's government works!"},
+    budget: {icon: '💰', name: 'Budget Watchdog',      desc: "You can track public funds like a pro!"},
+    katiba: {icon: '📜', name: 'Katiba Guardian',      desc: "You know your Constitution!"}
+  };
+
+  const badge = categoryBadges[currentCategory];
+  if (pct >= 60 && !state.user.badges.includes(currentCategory)) {
+    state.user.badges.push(currentCategory);
+    document.getElementById('badgeEarned').style.display = 'flex';
+    document.getElementById('badgeEarned').innerHTML =
+      '<div class="badge-icon">' + badge.icon + '</div>' +
+      '<div class="badge-text"><h4>' + badge.name + ' Badge Unlocked! 🎉</h4>' +
+      '<p>' + badge.desc + '</p></div>';
+  } else {
+    document.getElementById('badgeEarned').style.display = 'none';
+  }
+
+  if (pct === 100 && !state.user.badges.includes('perfect')) {
+    state.user.badges.push('perfect');
+  }
+
+  updateUI();
+  if (pct >= 80) showConfetti();
+  showScreen('results');
+}
+
+// ═══════════════════════════════════════
+// LEADERBOARD
+// ═══════════════════════════════════════
+function renderLeaderboard() {
+  document.getElementById('yourRankName').textContent = state.user.name;
+  document.getElementById('yourRankXP').textContent = `${state.user.xp} XP`;
+  const levels = ['Mwanzo','Mwanafunzi','Mwelewa','Mtetezi','Kiongozi','Mzalendo','Mlinzi wa Katiba'];
+  document.getElementById('yourRankLevel').textContent = `Level ${state.user.level} • ${levels[state.user.level-1]}`;
+
+  const list = document.getElementById('lbList');
+  list.innerHTML = lbData.map((user, i) => {
+    const medal = medals[i] || `${i+1}`;
+    const rankClass = i === 0 ? 'gold' : i === 1 ? 'silver' : i === 2 ? 'bronze' : '';
+    return `
+      <div class="lb-item">
+        <div class="lb-rank ${rankClass}">${i < 3 ? medals[i] : i+1}</div>
+        <div class="lb-avatar" style="background:${user.color}22; color:${user.color};">
+          ${user.name.charAt(0)}
+        </div>
+        <div class="lb-info">
+          <div class="lb-name">${user.name}</div>
+          <div class="lb-level">🏅 ${user.level} • ${user.county}</div>
+        </div>
+        <div class="lb-xp">${user.xp.toLocaleString()} XP</div>
+      </div>
+    `;
+  }).join('');
+}
+
+function switchTab(el, period) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  showToast(`Showing ${period} rankings`);
+}
+
+// ═══════════════════════════════════════
+// ASK KATIBA
+// ═══════════════════════════════════════
+function askQuestion(question) {
+  document.getElementById('askInput').value = question;
+  sendQuestion();
+}
+
+function sendQuestion() {
+  const input = document.getElementById('askInput');
+  const question = input.value.trim();
+  if (!question) return;
+  input.value = '';
+
+  const messages = document.getElementById('chatMessages');
+
+  // User message
+  messages.innerHTML += `
+    <div class="message user">
+      <div class="message-bubble">${question}</div>
+      <div class="message-meta">You • Just now</div>
+    </div>
+  `;
+
+  // Typing indicator
+  const typingId = 'typing-' + Date.now();
+  messages.innerHTML += `
+    <div class="message bot" id="${typingId}">
+      <div class="message-bubble">
+        <div class="typing"><span></span><span></span><span></span></div>
+      </div>
+    </div>
+  `;
+  messages.scrollTop = messages.scrollHeight;
+
+  // Simulate AI response delay
+  setTimeout(() => {
+    const response = getKatibaAnswer(question);
+    document.getElementById(typingId).remove();
+    messages.innerHTML += `
+      <div class="message bot">
+        <div class="message-bubble">
+          ${response.answer.replace(/\n/g, '<br>')}
+          <div class="message-article">📜 ${response.article}</div>
+        </div>
+        <div class="message-meta">Katiba AI • Just now</div>
+      </div>
+    `;
+    messages.scrollTop = messages.scrollHeight;
+  }, 1500);
+}
+
+// ═══════════════════════════════════════
+// PROFILE
+// ═══════════════════════════════════════
+function updateProfile() {
+  const initial = state.user.name.charAt(0).toUpperCase();
+  document.getElementById('profileAvatarLg').textContent = initial;
+  document.getElementById('profileName').textContent = state.user.name;
+  document.getElementById('profileCounty').textContent = state.user.county + (state.user.age ? ' • Age ' + state.user.age : '');
+  const levels = ['Mwanzo','Mwanafunzi','Mwelewa','Mtetezi','Kiongozi','Mzalendo','Mlinzi wa Katiba'];
+  document.getElementById('profileLevelBadge').textContent = `Level ${state.user.level}: ${levels[state.user.level-1]}`;
+  document.getElementById('pStatXP').textContent = state.user.xp;
+  document.getElementById('pStatAnswered').textContent = state.user.answered;
+  document.getElementById('pStatStreak').textContent = state.user.streak;
+
+  // Update badge states
+  const allBadges = ['rights','voting','govt','budget','katiba','streak','perfect','legend'];
+  allBadges.forEach(b => {
+    const el = document.getElementById(`badge-${b}`);
+    if (el) {
+      if (state.user.badges.includes(b)) el.classList.remove('locked');
+      else el.classList.add('locked');
+    }
+  });
+}
+
+// ═══════════════════════════════════════
+// UTILITIES
+// ═══════════════════════════════════════
+function showConfetti() {
+  const container = document.createElement('div');
+  container.className = 'confetti-container';
+  document.body.appendChild(container);
+  const colors = ['#c9a84c','#16a34a','#2563eb','#ea580c','#7c3aed','#be185d','#ffffff'];
+  for (let i = 0; i < 50; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.cssText = `
+      left: ${Math.random()*100}%;
+      top: ${Math.random()*20}%;
+      background: ${colors[Math.floor(Math.random()*colors.length)]};
+      animation-delay: ${Math.random()*1}s;
+      animation-duration: ${1.5+Math.random()*1.5}s;
+      transform: rotate(${Math.random()*360}deg);
+    `;
+    container.appendChild(piece);
+  }
+  setTimeout(() => container.remove(), 3000);
+}
+
+function showToast(msg) {
+  const existing = document.querySelector('.toast');
+  if (existing) existing.remove();
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.textContent = msg;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 2500);
+}
+
+// ═══════════════════════════════════════
+// SHARE ENGINE
+// ═══════════════════════════════════════
+const APP_URL = 'https://uongoziciviced.netlify.app';
+
+function buildShareText() {
+  const score = state.quiz.score;
+  const total = state.quiz.questions.length;
+  const pct   = Math.round((score / total) * 100);
+  const cat   = quizData[currentCategory] ? quizData[currentCategory].title : 'Civic Education';
+  const icon  = quizData[currentCategory] ? quizData[currentCategory].icon  : '📚';
+  const emoji = pct === 100 ? '🏆' : pct >= 80 ? '🎉' : pct >= 60 ? '👏' : '💪';
+  return {
+    pct, score, total, cat, icon,
+    short: `${emoji} I scored ${pct}% on the "${cat}" quiz on UongoZi! Do you know your rights as a Kenyan? 🇰🇪\nTest yourself: ${APP_URL}\n#UongoZi #KnowYourRights #KatibaMyangu`,
+    long:  `${emoji} I just scored ${pct}% (${score}/${total}) on the UongoZi Civic Education quiz — topic: ${icon} ${cat}.\n\nDo YOU know your constitutional rights? Most Kenyans don't. Find out: ${APP_URL}\n#UongoZi #KnowYourRights #KatibaMyangu #Kenya`
+  };
+}
+
+function openShareSheet() {
+  const d = buildShareText();
+  // Populate preview card
+  document.getElementById('sharePctBadge').textContent  = d.pct + '%';
+  document.getElementById('shareCardTitle').textContent = d.icon + ' ' + d.cat;
+  document.getElementById('shareCardSub').textContent   = 'I scored ' + d.score + '/' + d.total + ' — do you know your rights?';
+  document.getElementById('shareCopyText').textContent  = d.short;
+
+  const encoded = encodeURIComponent(d.short);
+  const encodedLong = encodeURIComponent(d.long);
+  const encodedUrl  = encodeURIComponent(APP_URL);
+
+  // Build platform deep-links
+  document.getElementById('shareWhatsApp').href =
+    'https://wa.me/?text=' + encoded;
+
+  document.getElementById('shareTwitter').href =
+    'https://twitter.com/intent/tweet?text=' + encoded;
+
+  document.getElementById('shareFacebook').href =
+    'https://www.facebook.com/sharer/sharer.php?u=' + encodedUrl +
+    '&quote=' + encodeURIComponent(d.pct + '% on "' + d.cat + '" — UongoZi Civic Quiz 🇰🇪');
+
+  document.getElementById('shareLinkedIn').href =
+    'https://www.linkedin.com/sharing/share-offsite/?url=' + encodedUrl +
+    '&summary=' + encodedLong;
+
+  document.getElementById('shareTelegram').href =
+    'https://t.me/share/url?url=' + encodedUrl + '&text=' + encoded;
+
+  document.getElementById('shareSMS').href =
+    'sms:?body=' + encoded;
+
+  document.getElementById('shareOverlay').classList.remove('hidden');
+}
+
+function closeShareSheet(e) {
+  if (!e || e.target === document.getElementById('shareOverlay')) {
+    document.getElementById('shareOverlay').classList.add('hidden');
+  }
+}
+
+function copyShareText() {
+  const text = document.getElementById('shareCopyText').textContent;
+  navigator.clipboard.writeText(text)
+    .then(() => showToast('Copied! Paste anywhere to share 📋'))
+    .catch(() => {
+      // fallback for older browsers
+      const ta = document.createElement('textarea');
+      ta.value = text; document.body.appendChild(ta);
+      ta.select(); document.execCommand('copy');
+      document.body.removeChild(ta);
+      showToast('Copied! 📋');
+    });
+}
+
+function copyForInstagram() {
+  copyShareText();
+  showToast('Copied! Paste as Instagram caption 📸');
+}
+
+function shareSMS() {
+  const d = buildShareText();
+  window.location.href = 'sms:?body=' + encodeURIComponent(d.short);
+}
+
+function trackShare(platform) {
+  // Placeholder for analytics — log share event
+  console.log('Share via:', platform, '| Category:', currentCategory, '| Score:', state.quiz.score);
+  setTimeout(() => closeShareSheet(), 300);
+}
+
+function shareApp() {
+  const msg = 'UongoZi — Know your constitutional rights! Free civic education for every Kenyan 🇰🇪 ' + APP_URL + ' #UongoZi';
+  if (navigator.share) {
+    navigator.share({ title: 'UongoZi', text: msg, url: APP_URL });
+  } else {
+    navigator.clipboard.writeText(msg).then(() => showToast('Link copied! Share UongoZi 🇰🇪'));
+  }
+}
+
+// ═══════════════════════════════════════
+// TRANSLATIONS
+// ═══════════════════════════════════════
+const translations = {
+  en: {
+    welcome_heading:   'Welcome to UongoZi! 🇰🇪',
+    welcome_sub:       'Your free civic education companion. Know your rights. Demand accountability.',
+    cta_text:          'Continue in English →',
+    tagline:           'Know Your Constitution 🇰🇪',
+    greeting_prefix:   'Hello',
+    home_streak:       'Day Streak',
+    home_answered:     'Answered',
+    home_badges:       'Badges',
+    streak_label:      'Day Streak!',
+    streak_sub:        'Keep learning daily to earn bonus XP',
+    ask_cta_title:     'Ask the Constitution',
+    ask_cta_sub:       'Get instant answers from Kenya\'s Katiba 2010 in plain language',
+    categories_label:  'Quiz Categories',
+    next_q:            'Next Question →',
+    see_results:       'See Results 🎉',
+    share_score:       'Share Your Score',
+    try_again:         'Try Again',
+    back_home:         '← Back to Home',
+    profile_saved:     '✅ Profile saved',
+    change_lang:       '↻',
+    nav_home:          'Home',
+    nav_ranks:         'Ranks',
+    nav_ask:           'Ask Katiba',
+    nav_profile:       'Profile',
+    quiz_question:     'Question',
+    quiz_of:           'of',
+    correct_label:     '✅ Correct!',
+    wrong_label:       '❌ Not quite!',
+    article_ref:       'Constitutional Reference',
+    leaderboard_title: 'Leaderboard 🏆',
+    leaderboard_sub:   'Top civic champions this week',
+    your_rank:         'Your Rank',
+    ask_title:         'Ask the Constitution',
+    ask_sub:           'Katiba 2010 explained in plain language',
+    ask_placeholder:   'Ask anything about the Kenyan Constitution…',
+    quick_label:       'Quick Questions',
+    profile_title:     'Your Profile',
+    badges_title:      'Your Badges',
+    settings_title:    'Settings',
+    gate_title:        'Tell us about yourself',
+    gate_sub:          'Help us understand who\'s learning civics in Kenya. Takes 20 seconds.',
+    gate_privacy:      'Privacy first. We only collect a nickname — never your real name, phone number, or email.',
+    gate_nickname_ph:  'e.g. Mjanja254, WanjikuW, KajaladoBoss…',
+    gate_cta:          'See My Results 🎯',
+    gate_skip:         'No thanks, skip this step',
+    results_correct:   'correct',
+    share_challenge:   'Challenge your friends to beat you!',
+    share_on:          'Share on',
+    weekly:            'Weekly',
+    monthly:           'Monthly',
+    alltime:           'All Time',
+  },
+  sw: {
+    welcome_heading:   'Karibu UongoZi! 🇰🇪',
+    welcome_sub:       'Mwenzako wa elimu ya uraia bila malipo. Jua haki zako. Dai uwajibikaji.',
+    cta_text:          'Endelea kwa Kiswahili →',
+    tagline:           'Jua Katiba Yako 🇰🇪',
+    greeting_prefix:   'Habari',
+    home_streak:       'Siku Mfululizo',
+    home_answered:     'Yaliyojibiwa',
+    home_badges:       'Beji',
+    streak_label:      'Siku Mfululizo!',
+    streak_sub:        'Endelea kujifunza kila siku kupata XP za ziada',
+    ask_cta_title:     'Uliza Katiba',
+    ask_cta_sub:       'Pata majibu ya haraka kutoka Katiba ya Kenya 2010 kwa lugha rahisi',
+    categories_label:  'Makundi ya Maswali',
+    next_q:            'Swali Lijalo →',
+    see_results:       'Angalia Matokeo 🎉',
+    share_score:       'Shiriki Alama Yako',
+    try_again:         'Jaribu Tena',
+    back_home:         '← Rudi Nyumbani',
+    profile_saved:     '✅ Wasifu umehifadhiwa',
+    change_lang:       '↻',
+    nav_home:          'Nyumbani',
+    nav_ranks:         'Orodha',
+    nav_ask:           'Uliza Katiba',
+    nav_profile:       'Wasifu',
+    quiz_question:     'Swali',
+    quiz_of:           'kati ya',
+    correct_label:     '✅ Sahihi!',
+    wrong_label:       '❌ Si sahihi!',
+    article_ref:       'Kumbukumbu ya Katiba',
+    leaderboard_title: 'Orodha ya Ushindi 🏆',
+    leaderboard_sub:   'Mabingwa wa uraia wiki hii',
+    your_rank:         'Nafasi Yako',
+    ask_title:         'Uliza Katiba',
+    ask_sub:           'Katiba 2010 imeelezwa kwa lugha rahisi',
+    ask_placeholder:   'Uliza chochote kuhusu Katiba ya Kenya…',
+    quick_label:       'Maswali ya Haraka',
+    profile_title:     'Wasifu Wako',
+    badges_title:      'Beji Zako',
+    settings_title:    'Mipangilio',
+    gate_title:        'Tuambie kuhusu wewe',
+    gate_sub:          'Tusaidie kuelewa nani anajifunza uraia Kenya. Inachukua sekunde 20.',
+    gate_privacy:      'Faragha kwanza. Tunachukua jina la utani tu — si jina halisi, simu, wala barua pepe.',
+    gate_nickname_ph:  'mfano: Mjanja254, WanjikuW, KajaladoBoss…',
+    gate_cta:          'Angalia Matokeo Yangu 🎯',
+    gate_skip:         'Hapana asante, ruka hatua hii',
+    results_correct:   'sahihi',
+    share_challenge:   'Changamoto marafiki wako wakupige!',
+    share_on:          'Shiriki kwa',
+    weekly:            'Wiki Hii',
+    monthly:           'Mwezi Huu',
+    alltime:           'Wakati Wote',
+  }
+};
+
+// Active language
+let activeLang = 'en';
+
+// ─────────────────────────────────────────
+// WELCOME MESSAGES per language (animated)
+// ─────────────────────────────────────────
+const welcomeMessages = {
+  en: [
+    { h: 'Welcome to UongoZi! 🇰🇪',      p: 'Your free civic education companion. Know your rights.' },
+    { h: 'Know your Constitution.',         p: 'Most Kenyans don\'t. You\'re about to change that.' },
+    { h: 'No to lies. Yes to leadership.', p: 'UongoZi — civic knowledge for every Kenyan.' },
+  ],
+  sw: [
+    { h: 'Karibu UongoZi! 🇰🇪',           p: 'Mwenzako wa elimu ya uraia bila malipo. Jua haki zako.' },
+    { h: 'Jua Katiba Yako.',               p: 'Wakenyan wengi hawajui. Wewe utabadilisha hilo.' },
+    { h: 'Hapana kwa uongo. Ndiyo kwa uongozi.', p: 'UongoZi — maarifa ya uraia kwa kila Mkenya.' },
+  ],
+};
+
+let welcomeInterval = null;
+let welcomeIdx = 0;
+
+function startWelcomeCycle(lang) {
+  clearInterval(welcomeInterval);
+  welcomeIdx = 0;
+  const msgs = welcomeMessages[lang] || welcomeMessages.en;
+  const el = document.getElementById('welcomeMsg');
+  // show first immediately
+  el.style.opacity = '0';
+  setTimeout(() => {
+    el.querySelector('h2').textContent = msgs[0].h;
+    el.querySelector('p').textContent  = msgs[0].p;
+    el.style.opacity = '1';
+  }, 150);
+
+  welcomeInterval = setInterval(() => {
+    welcomeIdx = (welcomeIdx + 1) % msgs.length;
+    el.style.opacity = '0';
+    setTimeout(() => {
+      el.querySelector('h2').textContent = msgs[welcomeIdx].h;
+      el.querySelector('p').textContent  = msgs[welcomeIdx].p;
+      el.style.opacity = '1';
+    }, 300);
+  }, 3200);
+}
+
+// ─────────────────────────────────────────
+// LANGUAGE SELECTION
+// ─────────────────────────────────────────
+function selectLang(lang) {
+  activeLang = lang;
+
+  // Update card states
+  ['en','sw','sheng'].forEach(l => {
+    const card  = document.getElementById('langCard-' + l);
+    const check = document.getElementById('langCheck-' + l);
+    if (!card) return;
+    card.classList.remove('selected');
+    if (check) check.textContent = '';
+  });
+
+  const card  = document.getElementById('langCard-' + lang);
+  const check = document.getElementById('langCheck-' + lang);
+  if (card)  card.classList.add('selected');
+  if (check) check.textContent = '✓';
+
+  // Welcome message cycle
+  startWelcomeCycle(lang);
+
+  // Update CTA
+  const cta     = document.getElementById('langCta');
+  const ctaText = document.getElementById('langCtaText');
+  const t = translations[lang] || translations.en;
+  ctaText.textContent = t.cta_text;
+  cta.classList.add('ready');
+}
+
+function shengSoon() {
+  showToast('Sheng inakuja hivi karibuni! 🤙 Coming soon!');
+}
+
+function confirmLang() {
+  clearInterval(welcomeInterval);
+  applyTranslations(activeLang);
+  showScreen('splash');
+}
+
+function changeLang() {
+  showScreen('langSelect');
+  if (activeLang) selectLang(activeLang);
+}
+
+// ─────────────────────────────────────────
+// APPLY TRANSLATIONS TO DOM
+// ─────────────────────────────────────────
+function applyTranslations(lang) {
+  const t = translations[lang] || translations.en;
+  activeLang = lang;
+
+  // Splash
+  const splashTag = document.querySelector('.splash-tagline');
+  if (splashTag) splashTag.textContent = t.tagline;
+
+  // Bottom navs (all instances)
+  document.querySelectorAll('.nav-label').forEach((el, i) => {
+    const labels = [t.nav_home, t.nav_ranks, t.nav_ask, t.nav_profile];
+    if (labels[i % 4]) el.textContent = labels[i % 4];
+  });
+
+  // Ask Katiba input placeholder
+  const askInput = document.getElementById('askInput');
+  if (askInput) askInput.placeholder = t.ask_placeholder;
+
+  // Quick questions label
+  const quickLabel = document.querySelector('.quick-label');
+  if (quickLabel) quickLabel.textContent = t.quick_label;
+
+  // Ask header
+  const askHeaders = document.querySelectorAll('.ask-header h2');
+  askHeaders.forEach(el => el.textContent = t.ask_title);
+  const askSubs = document.querySelectorAll('.ask-header p');
+  askSubs.forEach(el => el.textContent = t.ask_sub);
+
+  // Leaderboard header
+  const lbH = document.querySelector('.lb-header h2');
+  if (lbH) lbH.textContent = t.leaderboard_title;
+  const lbP = document.querySelector('.lb-header p');
+  if (lbP) lbP.textContent = t.leaderboard_sub;
+
+  // Lang badge
+  const flag  = { en: '🇬🇧', sw: '🇰🇪', sheng: '🤙' };
+  const label = { en: 'EN',   sw: 'SW',   sheng: 'SH' };
+  const langFlag  = document.getElementById('langBadgeFlag');
+  const langLabel = document.getElementById('langBadgeLabel');
+  if (langFlag)  langFlag.textContent  = flag[lang]  || '🇬🇧';
+  if (langLabel) langLabel.textContent = label[lang] || 'EN';
+
+  // Categories section title
+  const catTitle = document.querySelector('.section-title');
+  if (catTitle) catTitle.textContent = t.categories_label;
+
+  // Next / results button if quiz is live
+  const nextBtn = document.getElementById('nextBtn');
+  if (nextBtn && nextBtn.style.display !== 'none') {
+    const isLast = state.quiz.current >= state.quiz.questions.length - 1;
+    nextBtn.textContent = isLast ? t.see_results : t.next_q;
+  }
+
+  // Share sheet label
+  const shareLabel = document.querySelector('.share-platforms-label');
+  if (shareLabel) shareLabel.textContent = t.share_on;
+
+  // Gate fields
+  const gateTitle = document.querySelector('.gate-title');
+  if (gateTitle) gateTitle.textContent = t.gate_title;
+  const gateSub = document.querySelector('.gate-subtitle');
+  if (gateSub) gateSub.textContent = t.gate_sub;
+  const gateNick = document.getElementById('gateNickname');
+  if (gateNick) gateNick.placeholder = t.gate_nickname_ph;
+  const gateCta = document.querySelector('.gate-cta');
+  if (gateCta) gateCta.textContent = t.gate_cta;
+
+  // Streak banner text
+  const streakTxt = document.querySelector('.streak-banner .streak-text');
+  if (streakTxt) streakTxt.textContent = t.streak_label;
+
+  // Ask CTA block
+  const askCtaTitle = document.querySelector('.katiba-cta-text h3');
+  if (askCtaTitle) askCtaTitle.textContent = t.ask_cta_title;
+  const askCtaSub = document.querySelector('.katiba-cta-text p');
+  if (askCtaSub) askCtaSub.textContent = t.ask_cta_sub;
+
+  // Store preference
+  state.user.lang = lang;
+}
+
+// Start with default welcome on page load
+startWelcomeCycle('en');
+
+// Init
+updateUI();
+</script>
+
+<!-- ═══════════════ SHARE SHEET ═══════════════ -->
+<div class="share-overlay hidden" id="shareOverlay" onclick="closeShareSheet(event)">
+  <div class="share-sheet" id="shareSheet">
+    <div class="share-handle"></div>
+    <div class="share-sheet-title">Share Your Score 📤</div>
+    <p style="font-size:13px;color:#6b7280;margin-bottom:0;">Challenge your friends to beat you!</p>
+
+    <!-- Score preview card -->
+    <div class="share-score-card">
+      <div class="share-pct-badge"><span id="sharePctBadge">80%</span></div>
+      <div class="share-score-info">
+        <h4 id="shareCardTitle">Basic Rights &amp; Freedoms</h4>
+        <p id="shareCardSub">I scored 4/5 on UongoZi — do you know your rights?</p>
+      </div>
+    </div>
+
+    <!-- Copy text box -->
+    <div class="share-copy-box" id="shareCopyBox">
+      <span id="shareCopyText"></span>
+      <button class="share-copy-btn" onclick="copyShareText()">Copy</button>
+    </div>
+
+    <div class="share-platforms-label">Share on</div>
+    <div class="share-platforms">
+      <a class="platform-btn whatsapp" id="shareWhatsApp" href="#" target="_blank" onclick="trackShare('WhatsApp')">
+        <span class="platform-icon">💬</span>
+        <span class="platform-name">WhatsApp</span>
+      </a>
+      <a class="platform-btn twitter" id="shareTwitter" href="#" target="_blank" onclick="trackShare('Twitter/X')">
+        <span class="platform-icon">🐦</span>
+        <span class="platform-name">Twitter/X</span>
+      </a>
+      <a class="platform-btn facebook" id="shareFacebook" href="#" target="_blank" onclick="trackShare('Facebook')">
+        <span class="platform-icon">📘</span>
+        <span class="platform-name">Facebook</span>
+      </a>
+      <a class="platform-btn linkedin" id="shareLinkedIn" href="#" target="_blank" onclick="trackShare('LinkedIn')">
+        <span class="platform-icon">💼</span>
+        <span class="platform-name">LinkedIn</span>
+      </a>
+      <a class="platform-btn telegram" id="shareTelegram" href="#" target="_blank" onclick="trackShare('Telegram')">
+        <span class="platform-icon">✈️</span>
+        <span class="platform-name">Telegram</span>
+      </a>
+      <a class="platform-btn instagram" id="shareInstagram" href="#" onclick="copyForInstagram(); return false;">
+        <span class="platform-icon">📸</span>
+        <span class="platform-name">Instagram</span>
+      </a>
+      <a class="platform-btn sms" id="shareSMS" href="#" onclick="shareSMS(); return false;">
+        <span class="platform-icon">💬</span>
+        <span class="platform-name">SMS</span>
+      </a>
+      <a class="platform-btn copy" href="#" onclick="copyShareText(); return false;">
+        <span class="platform-icon">📋</span>
+        <span class="platform-name">Copy</span>
+      </a>
+    </div>
+
+    <button class="share-close-btn" onclick="closeShareSheet()">Close</button>
+  </div>
+</div>
+
+</body>
+</html>
