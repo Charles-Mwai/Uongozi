@@ -2,6 +2,7 @@ import React from 'react';
 import { useApp } from './context/AppContext';
 import LanguageSelect from './components/screens/LanguageSelect';
 import Splash from './components/screens/Splash';
+import Onboarding from './components/screens/Onboarding';
 import Home from './components/screens/Home';
 import Quiz from './components/screens/Quiz';
 import Results from './components/screens/Results';
@@ -18,6 +19,7 @@ const App: React.FC = () => {
     switch (currentScreen) {
       case 'langSelect': return <LanguageSelect />;
       case 'splash': return <Splash />;
+      case 'onboarding': return <Onboarding />;
       case 'home': return <Home />;
       case 'quiz': return <Quiz />;
       case 'results': return <Results />;

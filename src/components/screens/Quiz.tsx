@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
+import { quizData } from '../../data/quizData';
 
 const Quiz: React.FC = () => {
     const { quizState, setQuizState, setCurrentScreen, saveUser, user } = useApp();
@@ -37,9 +38,13 @@ const Quiz: React.FC = () => {
         } else {
             // Quiz finished
             const earnedXP = quizState.score * 50;
+            const newCompleted = user.completedCategories?.includes(quizState.category || '')
+                ? user.completedCategories
+                : [...(user.completedCategories || []), quizState.category || ''];
             saveUser({
                 xp: user.xp + earnedXP,
-                answered: user.answered + questions.length
+                answered: user.answered + questions.length,
+                completedCategories: newCompleted
             });
             setCurrentScreen('results');
         }
@@ -56,7 +61,7 @@ const Quiz: React.FC = () => {
         <div id="quiz" className="screen active">
             <div className="quiz-header">
                 <button className="back-btn" onClick={() => setCurrentScreen('home')}>←</button>
-                <div className="quiz-title">{quizState.category}</div>
+                <div className="quiz-title">{quizState.category ? (quizData[quizState.category]?.title || quizState.category) : ''}</div>
                 <div className="quiz-counter">{current + 1}/{questions.length}</div>
             </div>
 

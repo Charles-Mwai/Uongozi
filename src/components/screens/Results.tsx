@@ -42,13 +42,15 @@ const Results: React.FC = () => {
 
                 <div className="xp-earned">⚡ +{score * 50} XP Gained</div>
 
-                <div className="badge-earned">
-                    <div className="badge-icon">🎖️</div>
-                    <div className="badge-text">
-                        <h4>Mzalendo Badge Unlocked!</h4>
-                        <p>You've completed the <strong>{categoryTitle}</strong> civic quest.</p>
+                {percentage >= 60 && (
+                    <div className="badge-earned">
+                        <div className="badge-icon">🎖️</div>
+                        <div className="badge-text">
+                            <h4>Mzalendo Badge Unlocked!</h4>
+                            <p>You've completed the <strong>{categoryTitle}</strong> civic quest.</p>
+                        </div>
                     </div>
-                </div>
+                )}
 
                 <div className="results-actions">
                     <button className="btn-share-main" onClick={() => alert('Sharing functionality coming soon!')}>

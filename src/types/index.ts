@@ -13,6 +13,8 @@ export interface User {
   answered: number;
   badges: string[];
   profileCollected: boolean;
+  completedCategories: string[];
+  lastActiveDate: string;
 }
 
 export interface Question {

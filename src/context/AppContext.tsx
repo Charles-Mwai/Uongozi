@@ -26,7 +26,9 @@ const defaultUser: User = {
     streak: 0,
     answered: 0,
     badges: [],
-    profileCollected: false
+    profileCollected: false,
+    completedCategories: [],
+    lastActiveDate: ''
 };
 
 const defaultQuiz: QuizState = {
@@ -45,19 +47,46 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const [quizState, setQuizState] = useState<QuizState>(defaultQuiz);
     const [initialQuery, setInitialQuery] = useState('');
 
-    // Load user from localStorage
+    // Load user from localStorage and update streak
     useEffect(() => {
         const saved = localStorage.getItem('uongozi_user');
         if (saved) {
-            setUser(JSON.parse(saved));
-            setCurrentScreen('splash'); // Skip lang select if user exists
+            const parsed: User = { ...defaultUser, ...JSON.parse(saved) };
+            const today = new Date().toDateString();
+            const lastActive = parsed.lastActiveDate;
+
+            if (lastActive && lastActive !== today) {
+                const lastDate = new Date(lastActive);
+                const todayDate = new Date(today);
+                const diffDays = Math.round((todayDate.getTime() - lastDate.getTime()) / (1000 * 60 * 60 * 24));
+                if (diffDays === 1) {
+                    parsed.streak += 1;
+                } else if (diffDays > 1) {
+                    parsed.streak = 1;
+                }
+            } else if (!lastActive) {
+                parsed.streak = 1;
+            }
+
+            parsed.lastActiveDate = today;
+            localStorage.setItem('uongozi_user', JSON.stringify(parsed));
+            setUser(parsed);
+            if (parsed.profileCollected) {
+                setCurrentScreen('home');
+            } else {
+                setCurrentScreen('splash');
+            }
         }
     }, []);
 
     const saveUser = (updates: Partial<User>) => {
-        const newUser = { ...user, ...updates };
-        setUser(newUser);
-        localStorage.setItem('uongozi_user', JSON.stringify(newUser));
+        const merged = { ...user, ...updates };
+        // Auto-calculate level from XP (1000 XP per level)
+        merged.level = Math.floor(merged.xp / 1000) + 1;
+        // Update last active date
+        merged.lastActiveDate = new Date().toDateString();
+        setUser(merged);
+        localStorage.setItem('uongozi_user', JSON.stringify(merged));
     };
 
     const startQuiz = (category: string, questions: Question[]) => {

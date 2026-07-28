@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useApp } from '../../context/AppContext';
+import { getKatibaAnswer } from '../../data/katibaData';
 import BottomNav from '../ui/BottomNav';
 
 interface Message {
@@ -25,12 +26,15 @@ const AskKatiba: React.FC = () => {
     const [isTyping, setIsTyping] = useState(false);
     const scrollRef = useRef<HTMLDivElement>(null);
 
+    const initialQueryHandled = useRef(false);
+
     useEffect(() => {
-        if (initialQuery) {
+        if (initialQuery && !initialQueryHandled.current) {
+            initialQueryHandled.current = true;
             handleSend(initialQuery);
             setInitialQuery('');
         }
-    }, []);
+    }, [initialQuery]);
 
     useEffect(() => {
         if (scrollRef.current) {
@@ -76,13 +80,16 @@ const AskKatiba: React.FC = () => {
             setMessages(prev => [...prev, botMsg]);
         } catch (error) {
             console.error('Error:', error);
-            const errorMsg: Message = {
+            // Fallback to local keyword-matching answers
+            const fallback = getKatibaAnswer(text);
+            const fallbackMsg: Message = {
                 id: Date.now() + 1,
                 type: 'bot',
-                text: "I'm sorry, I'm having trouble connecting to my legal database right now. Please try again in a moment.",
+                text: fallback.answer,
+                article: `📖 ${fallback.article}`,
                 timestamp: "Just now"
             };
-            setMessages(prev => [...prev, errorMsg]);
+            setMessages(prev => [...prev, fallbackMsg]);
         } finally {
             setIsTyping(false);
         }

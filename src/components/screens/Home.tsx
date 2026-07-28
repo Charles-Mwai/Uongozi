@@ -58,7 +58,7 @@ const Home: React.FC = () => {
                     <div className="stat-label">Total XP</div>
                 </div>
                 <div className="stat-card">
-                    <div className="stat-value">#12</div>
+                    <div className="stat-value">#{user.xp > 0 ? [2840, 1920, 1750, 980, 820].filter(xp => xp > user.xp).length + 1 : '—'}</div>
                     <div className="stat-label">County Rank</div>
                 </div>
             </div>
@@ -98,7 +98,7 @@ const Home: React.FC = () => {
                             <div className="category-name">{cat.title}</div>
                             <div className="category-sw">{cat.swTitle || 'Katiba 2010'}</div>
                             <div className="category-progress">
-                                <div className="category-progress-fill" style={{ width: '40%', backgroundColor: cat.color }}></div>
+                                <div className="category-progress-fill" style={{ width: user.completedCategories?.includes(cat.id) ? '100%' : '0%', backgroundColor: cat.color }}></div>
                             </div>
                             <div className="category-questions">{cat.questions.length} Questions</div>
                         </div>

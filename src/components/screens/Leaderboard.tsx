@@ -17,6 +17,8 @@ const Leaderboard: React.FC = () => {
 
     const medals = ["🥇", "🥈", "🥉"];
 
+    const userRank = lbData.filter(entry => entry.xp > user.xp).length + 1;
+
     return (
         <div id="leaderboard" className="screen active">
             <header className="lb-header">
@@ -30,10 +32,10 @@ const Leaderboard: React.FC = () => {
             </header>
 
             <div className="lb-your-rank">
-                <div className="rank-badge">12</div>
+                <div className="rank-badge">{userRank}</div>
                 <div className="rank-info">
                     <h4>{user.nickname || 'Guest Ambassador'}</h4>
-                    <p>Ranked #12 in {user.county || 'Kenya'}</p>
+                    <p>Ranked #{userRank} in {user.county || 'Kenya'}</p>
                 </div>
                 <div className="lb-xp">{user.xp} XP</div>
             </div>

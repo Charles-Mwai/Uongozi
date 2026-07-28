@@ -5,7 +5,7 @@ const Splash: React.FC = () => {
     const { setCurrentScreen } = useApp();
 
     const handleGetStarted = () => {
-        setCurrentScreen('home');
+        setCurrentScreen('langSelect');
     };
 
     const handleGuest = () => {

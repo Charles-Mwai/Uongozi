@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
 
 const LanguageSelect: React.FC = () => {
-    const { saveUser, setCurrentScreen } = useApp();
-    const [selected, setSelected] = useState<string | null>(null);
+    const { user, saveUser, setCurrentScreen } = useApp();
+    const [selected, setSelected] = useState<string | null>(user.lang || 'en');
 
     const handleContinue = () => {
         if (selected && selected !== 'sheng') {
             saveUser({ lang: selected });
-            setCurrentScreen('splash');
+            setCurrentScreen('onboarding');
         }
     };
 
