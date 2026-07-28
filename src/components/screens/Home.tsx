@@ -28,7 +28,10 @@ const Home: React.FC = () => {
             <header className="home-header">
                 <div className="home-header-bg"></div>
                 <div className="header-top">
-                    <div className="header-logo">Uongo<span>Zi</span></div>
+                    <div className="header-logo">
+                        <img src="/logo (2).png" alt="Uongozi Logo" className="header-logo-img" />
+                        <span>Uongo<span>Zi</span></span>
+                    </div>
                     <div className="header-avatar" onClick={() => setCurrentScreen('profile')}>
                         {user.nickname ? user.nickname[0].toUpperCase() : 'U'}
                     </div>

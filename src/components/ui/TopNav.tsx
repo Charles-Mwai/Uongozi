@@ -15,7 +15,7 @@ const TopNav: React.FC = () => {
     return (
         <header className="top-nav-bar">
             <div className="top-nav-brand" onClick={() => setCurrentScreen('home')}>
-                <span className="brand-flag">🇰🇪</span>
+                <img src="/logo (2).png" alt="Uongozi Logo" className="brand-logo-img" />
                 <span className="brand-text">Uongo<span>zi</span></span>
             </div>
 

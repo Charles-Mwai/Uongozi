@@ -36,6 +36,9 @@
     font-weight: 800;
     font-size: 22px;
     color: white;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .header-logo span {

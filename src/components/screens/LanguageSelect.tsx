@@ -21,7 +21,7 @@ const LanguageSelect: React.FC = () => {
     return (
         <div id="langSelect" className="screen active">
             <div className="lang-content">
-                <div className="lang-logo-badge">U</div>
+                <img src="/logo (2).png" alt="Uongozi Logo" className="app-logo-img" />
                 <h1 className="lang-app-name">Uongo<span>Zi</span></h1>
 
                 <div className="welcome-msg">

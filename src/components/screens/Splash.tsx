@@ -15,7 +15,7 @@ const Splash: React.FC = () => {
     return (
         <div id="splash" className="screen active">
             <div className="splash-content">
-                <div className="lang-logo-badge">U</div>
+                <img src="/logo (2).png" alt="Uongozi Logo" className="app-logo-img" />
                 <h1 className="lang-app-name">Uongo<span>Zi</span></h1>
                 <p className="splash-tagline-small">KNOW YOUR CONSTITUTION KE</p>
 

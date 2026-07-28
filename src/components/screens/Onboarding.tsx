@@ -32,7 +32,7 @@ const Onboarding: React.FC = () => {
     return (
         <div id="onboarding" className="screen active">
             <div className="onboard-content">
-                <div className="lang-logo-badge">U</div>
+                <img src="/logo (2).png" alt="Uongozi Logo" className="app-logo-img" />
                 <h1 className="lang-app-name">Uongo<span>Zi</span></h1>
 
                 <div className="onboard-header">
