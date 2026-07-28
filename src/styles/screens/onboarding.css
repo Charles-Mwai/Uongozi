@@ -1,0 +1,65 @@
+/* ONBOARDING */
+#onboarding {
+    background: var(--white);
+    padding: 40px 24px;
+    justify-content: center;
+    align-items: center;
+}
+
+.onboarding-card-wrapper {
+    width: 100%;
+    max-width: 540px;
+    margin: 0 auto;
+}
+
+.onboard-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.onboard-header h2 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 28px;
+    color: var(--dark);
+    margin-bottom: 8px;
+}
+
+.onboard-header p {
+    font-size: 14px;
+    color: var(--gray);
+}
+
+.form-group {
+    margin-bottom: 24px;
+}
+
+.form-label {
+    display: block;
+    font-weight: 700;
+    font-size: 12px;
+    color: var(--gray);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form-input,
+.form-select {
+    width: 100%;
+    padding: 16px 20px;
+    border: 2px solid #e5e7eb;
+    border-radius: 14px;
+    font-size: 16px;
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--dark);
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-input:focus,
+.form-select:focus {
+    border-color: var(--green);
+    box-shadow: 0 0 0 4px rgba(10, 61, 46, 0.1);
+}

@@ -25,6 +25,7 @@ export interface Question {
 
 export interface QuizCategory {
   title: string;
+  swTitle?: string;
   color: string;
   icon: string;
   questions: Question[];

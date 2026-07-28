@@ -1,0 +1,24 @@
+:root {
+    --green: #0a3d2e;
+    --gold: #c9a84c;
+    --gold-light: #f0c96b;
+    --cream: #faf7f0;
+    --white: #ffffff;
+    --dark: #0d1117;
+    --gray: #6b7280;
+    --gray-light: #f3f4f6;
+    --red: #dc2626;
+    --rights: #16a34a;
+    --rights-bg: #dcfce7;
+    --voting: #ea580c;
+    --voting-bg: #ffedd5;
+    --govt: #2563eb;
+    --govt-bg: #dbeafe;
+    --budget: #7c3aed;
+    --budget-bg: #ede9fe;
+    --katiba: #be185d;
+    --katiba-bg: #fce7f3;
+    --radius: 16px;
+    --shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 12px 48px rgba(0, 0, 0, 0.15);
+}

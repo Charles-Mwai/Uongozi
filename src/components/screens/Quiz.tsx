@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
 
 const Quiz: React.FC = () => {
-    const { quizState, setQuizState, setCurrentScreen, saveUser } = useApp();
+    const { quizState, setQuizState, setCurrentScreen, saveUser, user } = useApp();
     const { questions, current, answered } = quizState;
     const currentQuestion = questions[current];
 
@@ -34,10 +34,12 @@ const Quiz: React.FC = () => {
             }));
             setSelectedOption(null);
             setIsCorrect(null);
+        } else {
             // Quiz finished
+            const earnedXP = quizState.score * 50;
             saveUser({
-                xp: quizState.score * 50, // This should actually be additive in a real app
-                answered: questions.length
+                xp: user.xp + earnedXP,
+                answered: user.answered + questions.length
             });
             setCurrentScreen('results');
         }
@@ -66,7 +68,7 @@ const Quiz: React.FC = () => {
             </div>
 
             <div className="quiz-body">
-                <div className="question-num">Question {current + 1}</div>
+                <div className="question-num">Question {current + 1} of {questions.length}</div>
                 <h2 className="question-text">{currentQuestion.q}</h2>
 
                 <div className="options-list">

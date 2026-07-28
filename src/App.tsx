@@ -8,9 +8,11 @@ import Results from './components/screens/Results';
 import AskKatiba from './components/screens/AskKatiba';
 import Leaderboard from './components/screens/Leaderboard';
 import Profile from './components/screens/Profile';
+import TopNav from './components/ui/TopNav';
 
 const App: React.FC = () => {
   const { currentScreen } = useApp();
+  const showNav = ['home', 'leaderboard', 'ask', 'profile'].includes(currentScreen);
 
   const renderScreen = () => {
     switch (currentScreen) {
@@ -28,6 +30,7 @@ const App: React.FC = () => {
 
   return (
     <div className="app-container">
+      {showNav && <TopNav />}
       {renderScreen()}
     </div>
   );

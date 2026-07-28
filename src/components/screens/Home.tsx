@@ -96,11 +96,11 @@ const Home: React.FC = () => {
                                 {cat.icon}
                             </div>
                             <div className="category-name">{cat.title}</div>
-                            <div className="category-sw">Haki za Msingi</div>
+                            <div className="category-sw">{cat.swTitle || 'Katiba 2010'}</div>
                             <div className="category-progress">
                                 <div className="category-progress-fill" style={{ width: '40%', backgroundColor: cat.color }}></div>
                             </div>
-                            <div className="category-questions">5 Questions</div>
+                            <div className="category-questions">{cat.questions.length} Questions</div>
                         </div>
                     ))}
                 </div>

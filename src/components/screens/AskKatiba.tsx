@@ -58,7 +58,7 @@ const AskKatiba: React.FC = () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     message: text,
-                    history: messages.slice(-5) // Send last few messages for context
+                    history: messages.slice(-5)
                 })
             });
 
@@ -110,43 +110,63 @@ const AskKatiba: React.FC = () => {
                 </div>
             </header>
 
-            <div className="chat-messages" ref={scrollRef}>
-                {messages.map((m) => (
-                    <div key={m.id} className={`message ${m.type}`}>
-                        <div className="message-bubble">
-                            <div className="message-text">{m.text}</div>
-                            {m.article && <div className="message-tag">{m.article}</div>}
-                        </div>
-                        <div className="message-meta">Katiba AI • {m.timestamp}</div>
+            <div className="ask-layout-container">
+                {/* Desktop Left Sidebar / Mobile Quick Bar */}
+                <aside className="quick-questions">
+                    <div className="quick-label">QUICK TOPICS & QUESTIONS</div>
+                    <div className="quick-btns">
+                        {quickQuestions.map(q => (
+                            <button key={q.label} className="quick-btn" onClick={() => handleSend(q.label)}>
+                                <span className="q-icon">{q.icon}</span> {q.label}
+                            </button>
+                        ))}
                     </div>
-                ))}
+
+                    <div className="katiba-guide-card">
+                        <div className="guide-icon">⚖️</div>
+                        <h4>Katiba AI Assistant</h4>
+                        <p>Ask in English or Kiswahili to get instant plain-language constitutional article breakdown.</p>
+                    </div>
+                </aside>
+
+                {/* Main Chat Timeline & Input Area */}
+                <main className="chat-main-area">
+                    <div className="chat-messages" ref={scrollRef}>
+                        {messages.map((m) => (
+                            <div key={m.id} className={`message ${m.type}`}>
+                                <div className="message-bubble">
+                                    <div className="message-text">{m.text}</div>
+                                    {m.article && <div className="message-tag">{m.article}</div>}
+                                </div>
+                                <div className="message-meta">Katiba AI • {m.timestamp}</div>
+                            </div>
+                        ))}
+                        {isTyping && (
+                            <div className="message bot">
+                                <div className="message-bubble typing-bubble">
+                                    <span className="typing-dot"></span>
+                                    <span className="typing-dot"></span>
+                                    <span className="typing-dot"></span>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="ask-input-area">
+                        <div className="input-box-wrapper">
+                            <textarea
+                                className="ask-input"
+                                placeholder="Ask anything about the Kenyan Constitution..."
+                                value={input}
+                                onChange={(e) => setInput(e.target.value)}
+                                onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && (e.preventDefault(), handleSend(input))}
+                            />
+                        </div>
+                        <button className="ask-send-btn" onClick={() => handleSend(input)}>↑</button>
+                    </div>
+                </main>
             </div>
 
-            <div className="quick-questions">
-                <div className="quick-label">QUICK QUESTIONS</div>
-                <div className="quick-btns">
-                    {quickQuestions.map(q => (
-                        <button key={q.label} className="quick-btn" onClick={() => handleSend(q.label)}>
-                            <span className="q-icon">{q.icon}</span> {q.label}
-                        </button>
-                    ))}
-                </div>
-            </div>
-
-            <div className="ask-input-area">
-                <div className="input-box-wrapper">
-                    <textarea
-                        className="ask-input"
-                        placeholder="Ask anything about the Kenyan Constitution..."
-                        value={input}
-                        onChange={(e) => setInput(e.target.value)}
-                        onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && (e.preventDefault(), handleSend(input))}
-                    />
-                </div>
-                <button className="ask-send-btn" onClick={() => handleSend(input)}>↑</button>
-            </div>
-
-            <div style={{ height: '80px' }}></div>
             <BottomNav />
         </div>
     );

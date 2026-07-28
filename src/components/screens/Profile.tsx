@@ -3,7 +3,7 @@ import { useApp } from '../../context/AppContext';
 import BottomNav from '../ui/BottomNav';
 
 const Profile: React.FC = () => {
-    const { user } = useApp();
+    const { user, setCurrentScreen } = useApp();
 
     const badges = [
         { id: 'mzalendo', name: 'Mzalendo', emoji: '🇰🇪', unlocked: user.xp > 0 },
@@ -19,32 +19,52 @@ const Profile: React.FC = () => {
         }
     };
 
+    const calculateLevelProgress = () => {
+        const xpInLevel = user.xp % 1000;
+        return (xpInLevel / 1000) * 100;
+    };
+
     return (
         <div id="profile" className="screen active">
-            <header className="profile-header">
-                <div className="profile-avatar-lg">
-                    {user.nickname ? user.nickname[0].toUpperCase() : 'U'}
+            <header className="home-header">
+                <div className="home-header-bg"></div>
+                <div className="header-top">
+                    <div className="header-logo">Ambassador <span>Profile</span></div>
+                    <div className="header-avatar" onClick={() => setCurrentScreen('home')}>
+                        ←
+                    </div>
                 </div>
-                <h2 className="profile-name">{user.nickname || 'Guest Ambassador'}</h2>
-                <div className="profile-level-badge">Level {user.level} Civic Hero</div>
+
+                <div className="user-greeting">
+                    <p>Civic Hero Profile</p>
+                    <h2>{user.nickname || 'Citizen'}</h2>
+
+                    <div className="xp-bar-container">
+                        <div className="xp-bar-fill" style={{ width: `${calculateLevelProgress()}%` }}></div>
+                    </div>
+                    <div className="xp-label">
+                        <span>Level {user.level}</span>
+                        <span><strong>{user.xp % 1000}</strong> / 1000 XP</span>
+                    </div>
+                </div>
             </header>
 
-            <div className="profile-stats">
-                <div className="profile-stat-item">
-                    <div className="profile-stat-val">{user.xp}</div>
-                    <div className="profile-stat-lbl">XP</div>
+            <div className="stats-strip">
+                <div className="stat-card">
+                    <div className="stat-value">{user.xp}</div>
+                    <div className="stat-label">Total XP</div>
                 </div>
-                <div className="profile-stat-item">
-                    <div className="profile-stat-val">#{user.streak}</div>
-                    <div className="profile-stat-lbl">Streak</div>
+                <div className="stat-card">
+                    <div className="stat-value">{user.streak}</div>
+                    <div className="stat-label">Day Streak</div>
                 </div>
-                <div className="profile-stat-item" onClick={handleReset} style={{ cursor: 'pointer' }}>
-                    <div className="profile-stat-val">⚙️</div>
-                    <div className="profile-stat-lbl">Reset</div>
+                <div className="stat-card" onClick={handleReset} style={{ cursor: 'pointer' }}>
+                    <div className="stat-value">⚙️</div>
+                    <div className="stat-label">Reset</div>
                 </div>
             </div>
 
-            <div className="badges-section">
+            <div className="section">
                 <div className="section-header">
                     <h3 className="section-title">My Achievements</h3>
                 </div>
@@ -58,8 +78,8 @@ const Profile: React.FC = () => {
                 </div>
             </div>
 
-            <div className="section" style={{ marginTop: '20px' }}>
-                <button className="btn-secondary" style={{ color: 'var(--red)', borderColor: 'var(--red)' }} onClick={handleReset}>
+            <div className="section" style={{ marginTop: '10px' }}>
+                <button className="btn-secondary" style={{ color: 'var(--red)', borderColor: 'var(--red)', width: '100%', padding: '12px', borderRadius: '12px', background: 'transparent', border: '1px solid var(--red)', cursor: 'pointer', fontSize: '14px', fontWeight: '600' }} onClick={handleReset}>
                     Reset Profile Data
                 </button>
             </div>

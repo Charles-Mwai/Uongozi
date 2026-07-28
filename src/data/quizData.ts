@@ -3,6 +3,7 @@ import type { QuizCategory } from '../types';
 export const quizData: Record<string, QuizCategory> = {
     rights: {
         title: "Basic Rights & Freedoms",
+        swTitle: "Haki za Msingi na Uhuru",
         color: "#16a34a",
         icon: "🛡️",
         questions: [
@@ -16,7 +17,7 @@ export const quizData: Record<string, QuizCategory> = {
             {
                 q: "How long can police hold you without charging you or presenting you to court?",
                 options: ["24 hours", "48 hours", "72 hours", "7 days"],
-                correct: 1,
+                correct: 0,
                 explanation: "Article 49(1)(f) gives you the right to be released or brought before a court within 24 hours of arrest. If the arrest happens outside court hours, within 24 hours of the next court session.",
                 article: "Article 49(1)(f) — Right to appear before court"
             },
@@ -45,6 +46,7 @@ export const quizData: Record<string, QuizCategory> = {
     },
     voting: {
         title: "Elections & Voting",
+        swTitle: "Uchaguzi na Haki ya Kupiga Kura",
         color: "#ea580c",
         icon: "🗳️",
         questions: [
@@ -71,7 +73,7 @@ export const quizData: Record<string, QuizCategory> = {
             },
             {
                 q: "In a presidential election, what percentage of votes must the winner receive?",
-                options: ["More than 40%", "More than 50%", "More than 51%", "More than 60%"],
+                options: ["More than 40%", "More than 50% + 25% in 24 counties", "More than 51%", "More than 60%"],
                 correct: 1,
                 explanation: "Article 138(4) requires the winning presidential candidate to receive more than half of all votes cast AND at least 25% of votes in at least 24 of Kenya's 47 counties.",
                 article: "Article 138 — Presidential Elections"
@@ -87,6 +89,7 @@ export const quizData: Record<string, QuizCategory> = {
     },
     govt: {
         title: "How Government Works",
+        swTitle: "Muundo wa Serikali na Uongozi",
         color: "#2563eb",
         icon: "🏛️",
         questions: [
@@ -101,26 +104,26 @@ export const quizData: Record<string, QuizCategory> = {
                 q: "How many counties does Kenya have under the devolved system?",
                 options: ["40", "42", "47", "54"],
                 correct: 2,
-                explanation: "Kenya has 47 counties established under the Fourth Schedule of the Constitution. Each county has its own assembly, governor, and budget to bring services closer to the people.",
-                article: "Article 6 + Fourth Schedule — Devolution"
+                explanation: "Kenya has 47 counties established under the First Schedule of the Constitution. Each county has its own assembly, governor, and budget to bring services closer to the people.",
+                article: "Article 6 + First Schedule — Devolution"
             },
             {
                 q: "What is the Senate's PRIMARY role in Kenya's Parliament?",
                 options: ["Passing the national budget", "Protecting county interests", "Appointing judges", "Declaring war"],
                 correct: 1,
-                explanation: "Article 96 states the Senate protects the interests of the counties and determines questions about county governments. It is NOT just a second chamber — it's specifically for devolution.",
+                explanation: "Article 96 states the Senate protects the interests of the counties and determines questions about county governments. It is specifically built for devolution.",
                 article: "Article 96 — Role of the Senate"
             },
             {
                 q: "How many Members of the National Assembly are there?",
-                options: ["290", "350", "350+", "290+47+12"],
-                correct: 3,
+                options: ["290", "350", "349 (290+47+12)", "210"],
+                correct: 2,
                 explanation: "The National Assembly has 290 constituency representatives + 47 women representatives (one per county) + 12 nominated members = 349 total members (Article 97).",
                 article: "Article 97 — Composition of National Assembly"
             },
             {
                 q: "What does 'devolution' mean in Kenya's context?",
-                options: ["Removing powers from leaders", "Transferring power to counties", "Dissolving Parliament", "Federalism"],
+                options: ["Removing powers from leaders", "Transferring power & resources to counties", "Dissolving Parliament", "Federalism"],
                 correct: 1,
                 explanation: "Devolution (Chapter 11) transfers political, administrative and financial powers to county governments, ensuring services and decision-making are closer to citizens, not centralized in Nairobi.",
                 article: "Chapter 11 — Devolved Government"
@@ -129,35 +132,36 @@ export const quizData: Record<string, QuizCategory> = {
     },
     budget: {
         title: "Public Budgeting",
+        swTitle: "Matumizi ya Pesa za Umma",
         color: "#7c3aed",
         icon: "💰",
         questions: [
             {
-                q: "Who is responsible for preparing Kenya's national budget?",
+                q: "Who is responsible for preparing Kenya's national budget estimates?",
                 options: ["The President", "The National Treasury", "Parliament", "The Auditor General"],
                 correct: 1,
-                explanation: "The National Treasury (Cabinet Secretary for Finance) prepares the budget. But Parliament must debate and approve it through the Appropriations Act under Article 221.",
+                explanation: "The National Treasury (Cabinet Secretary for Finance) prepares the budget estimates. But Parliament must debate and approve them through the Appropriations Act under Article 221.",
                 article: "Article 221 — Budget Estimates"
             },
             {
-                q: "What percentage of national revenue must the national government share with counties?",
-                options: ["10%", "15%", "At least 15%", "25%"],
-                correct: 2,
-                explanation: "Article 203(2) requires that counties receive at least 15% of the most recently audited national revenue annually. In practice, this has been around 15-17% of audited revenues.",
+                q: "What percentage of audited national revenue must be allocated to county governments?",
+                options: ["10%", "At least 15%", "25%", "50%"],
+                correct: 1,
+                explanation: "Article 203(2) requires that counties receive at least 15% of the most recently audited national revenue annually.",
                 article: "Article 203 — Equitable Share"
             },
             {
-                q: "What is the CDF (Constituency Development Fund) used for?",
-                options: ["MP salaries", "Constituency development projects", "National infrastructure", "Political campaigns"],
+                q: "What is the NG-CDF (National Government Constituencies Development Fund) used for?",
+                options: ["MP salaries", "Constituency development projects", "National defense", "Political campaigns"],
                 correct: 1,
-                explanation: "The CDF allocates funds directly to constituencies for local development projects — schools, roads, boreholes. Each MP oversees the fund for their constituency.",
-                article: "CDF Act, 2013"
+                explanation: "The NG-CDF allocates funds directly to constituencies for community development projects — schools, health centers, boreholes, and bursaries.",
+                article: "NG-CDF Act, 2015"
             },
             {
-                q: "Which office is responsible for auditing government spending?",
+                q: "Which office is responsible for auditing government spending and public funds?",
                 options: ["National Treasury", "Ethics and Anti-Corruption Commission", "Office of the Auditor General", "Controller of Budget"],
                 correct: 2,
-                explanation: "The Auditor General (Article 229) audits government accounts and reports to Parliament. They check whether public money was used for its intended purpose and report misuse.",
+                explanation: "The Auditor General (Article 229) audits government accounts and reports to Parliament. They check whether public money was spent legally and transparently.",
                 article: "Article 229 — Auditor General"
             },
             {
@@ -171,6 +175,7 @@ export const quizData: Record<string, QuizCategory> = {
     },
     katiba: {
         title: "The Constitution of Kenya",
+        swTitle: "Katiba ya Kenya 2010",
         color: "#be185d",
         icon: "📜",
         questions: [
@@ -185,29 +190,29 @@ export const quizData: Record<string, QuizCategory> = {
                 q: "What does Article 10 of the Constitution establish?",
                 options: ["The right to vote", "National values and principles of governance", "Freedom of movement", "Devolution"],
                 correct: 1,
-                explanation: "Article 10 lists Kenya's national values: patriotism, democracy, human dignity, equity, social justice, inclusiveness, equality, human rights, non-discrimination, and protection of the marginalized.",
+                explanation: "Article 10 lists Kenya's national values: patriotism, democracy, human dignity, equity, social justice, inclusiveness, equality, human rights, non-discrimination, and good governance.",
                 article: "Article 10 — National Values and Principles"
             },
             {
-                q: "The Constitution declares that sovereignty belongs to:",
-                options: ["The President", "Parliament", "The People of Kenya", "The Constitution itself"],
+                q: "The Constitution declares that sovereign power belongs to:",
+                options: ["The President", "Parliament", "The People of Kenya", "The Judiciary"],
                 correct: 2,
                 explanation: "Article 1(1) is clear: 'All sovereign power belongs to the people of Kenya.' The people exercise this power directly or through elected representatives.",
                 article: "Article 1 — Sovereignty of the People"
             },
             {
                 q: "How many chapters does Kenya's 2010 Constitution have?",
-                options: ["15", "18", "18 chapters + schedules", "22"],
-                correct: 2,
-                explanation: "The Constitution of Kenya 2010 has 18 chapters covering everything from the Bill of Rights, devolution, land, the environment, leadership, and finance.",
+                options: ["15", "18", "20", "22"],
+                correct: 1,
+                explanation: "The Constitution of Kenya 2010 has 18 chapters covering everything from the Bill of Rights, devolution, land, environment, leadership, finance, and national security.",
                 article: "Structure — Constitution of Kenya 2010"
             },
             {
-                q: "What percentage of referendum votes are needed to amend the Constitution?",
-                options: ["Simple majority (50%+1)", "Two-thirds of Parliament", "More than 50% of referendum voters", "Two-thirds in Parliament AND majority in referendum"],
-                correct: 3,
-                explanation: "Article 255 requires popular initiative amendments to be supported by two-thirds of Parliament AND approved by majority voters in a referendum. This protects the Constitution from easy changes.",
-                article: "Article 255 — Amendment of Constitution"
+                q: "What is required to amend protected clauses of the Constitution by popular initiative?",
+                options: ["Simple majority in Parliament", "1 million registered voters + county assembly approvals + referendum", "Court approval only", "Cabinet vote"],
+                correct: 1,
+                explanation: "Article 257 requires 1 million registered voters to sign, approval by at least 24 county assemblies, Parliament vote, and a public referendum.",
+                article: "Article 257 — Amendment by Popular Initiative"
             }
         ]
     }
