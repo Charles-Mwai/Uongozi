@@ -18,14 +18,20 @@ export interface User {
   lastActiveDate: string;
   lastChallengeDate: string;
   categoryProgress: Record<string, number>; // categoryId -> questions answered
+  seenQuestionIds: string[]; // Track seen question IDs to serve fresh questions
 }
 
 export interface Question {
+  id: string;
   q: string;
+  q_sw?: string;
   options: string[];
+  options_sw?: string[];
   correct: number;
   explanation: string;
+  explanation_sw?: string;
   article: string;
+  category?: string;
 }
 
 export interface QuizCategory {
@@ -44,6 +50,7 @@ export interface QuizState {
   answered: boolean;
   comboCount: number;
   isReplay: boolean;
+  isAiGenerated?: boolean;
 }
 
 export interface LeaderboardEntry {
@@ -59,4 +66,5 @@ export interface Toast {
   message: string;
   type: 'xp' | 'badge' | 'streak' | 'levelup' | 'info';
 }
+
 

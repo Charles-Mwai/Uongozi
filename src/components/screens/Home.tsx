@@ -1,12 +1,15 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import { quizData } from '../../data/quizData';
 import { getLevelTitle } from '../../data/badgeData';
+import { getFreshQuestionsForCategory, getDailyChallengeQuestion } from '../../utils/quizUtils';
+import { fetchAiQuestions } from '../../services/quizService';
 import BottomNav from '../ui/BottomNav';
 
 const Home: React.FC = () => {
     const { user, startQuiz, setCurrentScreen, setInitialQuery, saveUser, showToast } = useApp();
-    const [inputValue, setInputValue] = React.useState('');
+    const [inputValue, setInputValue] = useState('');
+    const [isGeneratingAi, setIsGeneratingAi] = useState(false);
 
     const categories = Object.entries(quizData).map(([id, cat]) => ({
         id,
@@ -30,22 +33,31 @@ const Home: React.FC = () => {
 
     const dailyChallengeQuestion = useMemo(() => {
         const allQuestions = categories.flatMap(c => c.questions.map(q => ({ ...q, categoryId: c.id, categoryTitle: c.title })));
-        let hash = 0;
-        for (let i = 0; i < todayStr.length; i++) {
-            hash = (hash << 5) - hash + todayStr.charCodeAt(i);
-            hash |= 0;
-        }
-        const index = Math.abs(hash) % allQuestions.length;
-        return allQuestions[index];
+        return getDailyChallengeQuestion(allQuestions, todayStr);
     }, [todayStr]);
 
     const handleStartDailyChallenge = () => {
         if (isChallengeDoneToday) return;
         // Launch a 1-question quiz
-        startQuiz(dailyChallengeQuestion.categoryId, [dailyChallengeQuestion]);
+        startQuiz((dailyChallengeQuestion as any).categoryId || 'katiba', [dailyChallengeQuestion]);
         // Mark challenge done
         saveUser({ lastChallengeDate: todayStr, xp: user.xp + 25 });
         showToast('🎯 Daily Challenge Started! +25 Bonus XP awarded!', 'xp');
+    };
+
+    const handleCategoryClick = (catId: string) => {
+        const categoryQuestions = quizData[catId]?.questions || [];
+        const freshQuestions = getFreshQuestionsForCategory(categoryQuestions, user.seenQuestionIds, 5);
+        const isReplay = user.completedCategories?.includes(catId);
+        startQuiz(catId, freshQuestions, isReplay);
+    };
+
+    const handleStartAiQuiz = async (catId: string) => {
+        setIsGeneratingAi(true);
+        showToast('✨ Generating fresh AI questions from Constitution...', 'info');
+        const questions = await fetchAiQuestions(catId, user.lang || 'en', 5);
+        setIsGeneratingAi(false);
+        startQuiz(catId, questions, false, true);
     };
 
     const levelTitle = getLevelTitle(user.level);
@@ -98,7 +110,7 @@ const Home: React.FC = () => {
                     <input
                         type="text"
                         className="home-chat-input"
-                        placeholder="Ask anything about the Kenyan Constitution..."
+                        placeholder="Ask Katiba AI about Kenya's Constitution 2010..."
                         value={inputValue}
                         onChange={(e) => setInputValue(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && handleHomeSearch()}
@@ -116,7 +128,7 @@ const Home: React.FC = () => {
                     <span className="daily-challenge-xp">+75 XP Bonus</span>
                 </div>
                 <div className="daily-challenge-title">
-                    {dailyChallengeQuestion ? dailyChallengeQuestion.q : 'What rights are protected under Article 27?'}
+                    {user.lang === 'sw' && dailyChallengeQuestion.q_sw ? dailyChallengeQuestion.q_sw : dailyChallengeQuestion.q}
                 </div>
                 {isChallengeDoneToday ? (
                     <div style={{ color: '#34d399', fontSize: '13px', fontWeight: '700' }}>
@@ -131,8 +143,8 @@ const Home: React.FC = () => {
 
             <div className="section">
                 <div className="section-header">
-                    <h3 className="section-title">Knowledge Quests</h3>
-                    <span className="section-link">View All</span>
+                    <h3 className="section-title">Constitutional Quests</h3>
+                    <span className="section-link">Dynamic Pool</span>
                 </div>
 
                 <div className="categories-grid">
@@ -142,19 +154,49 @@ const Home: React.FC = () => {
                             <div
                                 key={cat.id}
                                 className="category-card"
-                                onClick={() => startQuiz(cat.id, cat.questions)}
+                                style={{ position: 'relative' }}
                             >
-                                <div className="category-icon" style={{ backgroundColor: `${cat.color}20`, color: cat.color }}>
-                                    {cat.icon}
+                                <div onClick={() => handleCategoryClick(cat.id)}>
+                                    <div className="category-icon" style={{ backgroundColor: `${cat.color}20`, color: cat.color }}>
+                                        {cat.icon}
+                                    </div>
+                                    <div className="category-name">{user.lang === 'sw' && cat.swTitle ? cat.swTitle : cat.title}</div>
+                                    <div className="category-sw">{cat.swTitle || 'Katiba 2010'}</div>
+                                    <div className="category-progress">
+                                        <div className="category-progress-fill" style={{ width: isDone ? '100%' : '0%', backgroundColor: cat.color }}></div>
+                                    </div>
+                                    <div className="category-questions">
+                                        {isDone ? '✅ Replay (Fresh Mix)' : `${cat.questions.length} Questions Bank`}
+                                    </div>
                                 </div>
-                                <div className="category-name">{cat.title}</div>
-                                <div className="category-sw">{cat.swTitle || 'Katiba 2010'}</div>
-                                <div className="category-progress">
-                                    <div className="category-progress-fill" style={{ width: isDone ? '100%' : '0%', backgroundColor: cat.color }}></div>
-                                </div>
-                                <div className="category-questions">
-                                    {isDone ? '✅ Completed (Tap to Replay)' : `${cat.questions.length} Questions`}
-                                </div>
+
+                                <button
+                                    className="ai-quest-mini-btn"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleStartAiQuiz(cat.id);
+                                    }}
+                                    disabled={isGeneratingAi}
+                                    title="Generate brand new AI questions from Constitution"
+                                    style={{
+                                        marginTop: '10px',
+                                        width: '100%',
+                                        padding: '6px 10px',
+                                        borderRadius: '8px',
+                                        fontSize: '11px',
+                                        fontWeight: '700',
+                                        border: '1px solid rgba(255, 255, 255, 0.15)',
+                                        background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
+                                        color: '#fff',
+                                        cursor: 'pointer',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        gap: '4px'
+                                    }}
+                                >
+                                    Fresh Quest
+                                </button>
                             </div>
                         );
                     })}
@@ -175,4 +217,5 @@ const Home: React.FC = () => {
 };
 
 export default Home;
+
 

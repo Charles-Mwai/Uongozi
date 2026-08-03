@@ -4,7 +4,7 @@ import { quizData } from '../../data/quizData';
 
 const Quiz: React.FC = () => {
     const { quizState, setQuizState, setCurrentScreen, saveUser, user, showToast } = useApp();
-    const { questions, current, answered, category, isReplay } = quizState;
+    const { questions, current, answered, category, isReplay, isAiGenerated } = quizState;
     const currentQuestion = questions[current];
 
     const [selectedOption, setSelectedOption] = useState<number | null>(null);
@@ -36,6 +36,13 @@ const Quiz: React.FC = () => {
     }, [answered, timeLeft, setQuizState]);
 
     if (!currentQuestion) return null;
+
+    const useSwahili = user.lang === 'sw';
+    const displayQuestionText = (useSwahili && currentQuestion.q_sw) ? currentQuestion.q_sw : currentQuestion.q;
+    const displayOptions = (useSwahili && currentQuestion.options_sw && currentQuestion.options_sw.length === currentQuestion.options.length)
+        ? currentQuestion.options_sw
+        : currentQuestion.options;
+    const displayExplanation = (useSwahili && currentQuestion.explanation_sw) ? currentQuestion.explanation_sw : currentQuestion.explanation;
 
     const handleOptionSelect = (index: number) => {
         if (answered) return;
@@ -145,7 +152,12 @@ const Quiz: React.FC = () => {
             <div className="quiz-body">
                 <div className="quiz-top-pills">
                     <div className="question-num">Question {current + 1} of {questions.length} • ⏱️ {timeLeft}s</div>
-                    <div style={{ display: 'flex', gap: '6px' }}>
+                    <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                        {isAiGenerated && (
+                            <span className="replay-pill" style={{ background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)', color: '#fff' }}>
+                                ✨ AI Quest
+                            </span>
+                        )}
                         {isAlreadyCompleted && (
                             <span className="replay-pill">🔄 Replay (Half XP)</span>
                         )}
@@ -157,7 +169,7 @@ const Quiz: React.FC = () => {
                     </div>
                 </div>
 
-                <h2 className="question-text">{currentQuestion.q}</h2>
+                <h2 className="question-text">{displayQuestionText}</h2>
 
                 <div className="options-list" style={{ position: 'relative' }}>
                     {floatXp !== null && (
@@ -166,7 +178,7 @@ const Quiz: React.FC = () => {
                         </div>
                     )}
 
-                    {currentQuestion.options.map((option, index) => (
+                    {displayOptions.map((option, index) => (
                         <button
                             key={index}
                             className={`option-btn ${getOptionClass(index)}`}
@@ -184,7 +196,7 @@ const Quiz: React.FC = () => {
                         <div className="feedback-title">
                             {isCorrect ? '✨ Correct!' : timeLeft === 0 ? '⏰ Time Up!' : '❌ Not quite right'}
                         </div>
-                        <p className="feedback-text">{currentQuestion.explanation}</p>
+                        <p className="feedback-text">{displayExplanation}</p>
                         <div className="article-tag">📖 {currentQuestion.article}</div>
                     </div>
                 )}
@@ -202,4 +214,5 @@ const Quiz: React.FC = () => {
 };
 
 export default Quiz;
+
 

@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import type { User, Screen, QuizState, Question, Toast } from '../types';
 import { BADGE_DEFINITIONS } from '../data/badgeData';
+import { shuffleQuestionOptions } from '../utils/quizUtils';
 
 interface AppContextType {
     user: User;
@@ -9,7 +10,7 @@ interface AppContextType {
     setCurrentScreen: (screen: Screen) => void;
     quizState: QuizState;
     setQuizState: React.Dispatch<React.SetStateAction<QuizState>>;
-    startQuiz: (category: string, questions: Question[], isReplay?: boolean) => void;
+    startQuiz: (category: string, questions: Question[], isReplay?: boolean, isAiGenerated?: boolean) => void;
     saveUser: (updates: Partial<User>) => User;
     awardBadge: (badgeId: string) => void;
     toasts: Toast[];
@@ -38,6 +39,7 @@ const defaultUser: User = {
     lastActiveDate: '',
     lastChallengeDate: '',
     categoryProgress: {},
+    seenQuestionIds: [],
 };
 
 const defaultQuiz: QuizState = {
@@ -48,6 +50,7 @@ const defaultQuiz: QuizState = {
     answered: false,
     comboCount: 0,
     isReplay: false,
+    isAiGenerated: false,
 };
 
 const LEVEL_TITLE_MAP: Record<number, string> = {
@@ -71,6 +74,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         const saved = localStorage.getItem('uongozi_user');
         if (saved) {
             const parsed: User = { ...defaultUser, ...JSON.parse(saved) };
+            if (!parsed.seenQuestionIds) parsed.seenQuestionIds = [];
             const today = new Date().toDateString();
             const lastActive = parsed.lastActiveDate;
 
@@ -168,9 +172,20 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         });
     }, [showToast]);
 
-    const startQuiz = useCallback((category: string, questions: Question[], isReplay = false) => {
-        // Shuffle questions for variety
-        const shuffled = [...questions].sort(() => Math.random() - 0.5);
+    const startQuiz = useCallback((category: string, questions: Question[], isReplay = false, isAiGenerated = false) => {
+        // Dynamically shuffle options for every question so choices move positions
+        const prepared = questions.map(q => shuffleQuestionOptions(q));
+        const shuffled = [...prepared].sort(() => Math.random() - 0.5);
+
+        // Record seen question IDs to prevent repeating seen questions in future sessions
+        const newQuestionIds = questions.map(q => q.id).filter(Boolean);
+        setUser(prev => {
+            const updatedSeen = Array.from(new Set([...(prev.seenQuestionIds || []), ...newQuestionIds]));
+            const updated = { ...prev, seenQuestionIds: updatedSeen };
+            localStorage.setItem('uongozi_user', JSON.stringify(updated));
+            return updated;
+        });
+
         setQuizState({
             category,
             questions: shuffled,
@@ -179,9 +194,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             answered: false,
             comboCount: 0,
             isReplay,
+            isAiGenerated,
         });
         setCurrentScreen('quiz');
     }, []);
+
 
     return (
         <AppContext.Provider value={{
