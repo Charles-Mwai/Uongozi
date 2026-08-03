@@ -53,9 +53,16 @@
 
 .welcome-msg h2 {
     font-size: 1.5rem;
-    color: #b0c4bd;
+    color: #ffffff;
     margin-bottom: 0.5rem;
     font-weight: 700;
+}
+
+.welcome-msg p {
+    font-size: 1rem;
+    color: #ffffff;
+    line-height: 1.5;
+    margin: 0;
 }
 
 .lang-cards {
@@ -76,6 +83,7 @@
     cursor: pointer;
     transition: all 0.3s ease;
     position: relative;
+    color: #ffffff;
 }
 
 .lang-card.selected {
@@ -86,6 +94,10 @@
 .lang-icon-badge {
     width: 56px;
     height: 56px;
+    min-width: 56px;
+    min-height: 56px;
+    flex-shrink: 0;
+    aspect-ratio: 1 / 1;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 16px;
     display: flex;
@@ -94,6 +106,11 @@
     font-weight: 700;
     font-size: 1.25rem;
     color: #ffffff;
+    box-sizing: border-box;
+}
+
+.lang-info {
+    flex: 1;
 }
 
 .lang-name {
@@ -102,14 +119,40 @@
     color: #ffffff;
 }
 
+.lang-desc {
+    font-size: 0.875rem;
+    color: #ffffff;
+    line-height: 1.4;
+}
+
+.coming-soon-badge {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    background: rgba(238, 188, 83, 0.15);
+    border: 1px solid rgba(238, 188, 83, 0.4);
+    color: #eebc53;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 20px;
+}
+
 .lang-radio {
     width: 24px;
     height: 24px;
+    min-width: 24px;
+    min-height: 24px;
+    flex-shrink: 0;
+    aspect-ratio: 1 / 1;
     border: 2px solid rgba(255, 255, 255, 0.3);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
+    box-sizing: border-box;
 }
 
 .selected .lang-radio {
@@ -119,10 +162,15 @@
 .lang-radio-inner {
     width: 12px;
     height: 12px;
+    min-width: 12px;
+    min-height: 12px;
+    flex-shrink: 0;
+    aspect-ratio: 1 / 1;
     background: #eebc53;
     border-radius: 50%;
     transform: scale(0);
     transition: transform 0.2s;
+    box-sizing: border-box;
 }
 
 .selected .lang-radio-inner {
