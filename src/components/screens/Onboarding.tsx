@@ -15,6 +15,7 @@ const Onboarding: React.FC = () => {
     const { saveUser, setCurrentScreen, user } = useApp();
     const [nickname, setNickname] = useState(user.nickname || '');
     const [county, setCounty] = useState(user.county || '');
+    const [gender, setGender] = useState(user.gender || 'Prefer not to say');
 
     const handleFinish = (e: React.FormEvent) => {
         e.preventDefault();
@@ -22,6 +23,7 @@ const Onboarding: React.FC = () => {
             saveUser({
                 nickname: nickname.trim(),
                 county,
+                gender,
                 profileCollected: true,
                 xp: user.xp || 50 // Welcome bonus
             });
@@ -75,6 +77,29 @@ const Onboarding: React.FC = () => {
                                     <option key={c} value={c}>{c}</option>
                                 ))}
                             </select>
+                        </div>
+
+                        <div className="form-group">
+                            <label className="form-label">
+                                <span className="label-icon">👤</span> Gender
+                            </label>
+                            <div className="gender-picker-grid">
+                                {[
+                                    { label: 'Male', emoji: '👨' },
+                                    { label: 'Female', emoji: '👩' },
+                                    { label: 'Prefer not to say', emoji: '🔒' }
+                                ].map(item => (
+                                    <button
+                                        type="button"
+                                        key={item.label}
+                                        className={`gender-btn ${gender === item.label ? 'active' : ''}`}
+                                        onClick={() => setGender(item.label)}
+                                    >
+                                        <span>{item.emoji}</span>
+                                        <span>{item.label}</span>
+                                    </button>
+                                ))}
+                            </div>
                         </div>
 
                         <button type="submit" className="onboard-submit-btn">

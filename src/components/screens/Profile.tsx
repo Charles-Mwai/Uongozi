@@ -36,6 +36,12 @@ const Profile: React.FC = () => {
                 <div className="user-greeting">
                     <p>Civic Hero Profile • <strong style={{ color: 'var(--gold)' }}>{levelTitle}</strong></p>
                     <h2>{user.nickname || 'Citizen'}</h2>
+                    {(user.county || user.gender) && (
+                        <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.55)', marginTop: '4px', display: 'flex', gap: '10px', justifyContent: 'center' }}>
+                            {user.county && <span>📍 {user.county}</span>}
+                            {user.gender && <span>·  {user.gender === 'Male' ? '👨 Male' : user.gender === 'Female' ? '👩 Female' : '🔒 Prefer not to say'}</span>}
+                        </p>
+                    )}
 
                     <div className="xp-bar-container">
                         <div className="xp-bar-fill" style={{ width: `${calculateLevelProgress()}%` }}></div>
@@ -46,6 +52,7 @@ const Profile: React.FC = () => {
                     </div>
                 </div>
             </header>
+
 
             <div className="stats-strip" style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>
                 <div className="stat-card">
