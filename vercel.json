@@ -5,6 +5,18 @@
             "destination": "/api/chat"
         },
         {
+            "source": "/api/quiz/generate",
+            "destination": "/api/quiz-generate"
+        },
+        {
+            "source": "/api/leaderboard/submit",
+            "destination": "/api/leaderboard-submit"
+        },
+        {
+            "source": "/api/leaderboard",
+            "destination": "/api/leaderboard-get"
+        },
+        {
             "source": "/(.*)",
             "destination": "/index.html"
         }

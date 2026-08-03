@@ -114,6 +114,115 @@ JSON format example:
     }
 });
 
+// Import Supabase
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
+const supabase = (supabaseUrl && supabaseAnonKey) ? createClient(supabaseUrl, supabaseAnonKey) : null;
+
+// In-memory fallback if Supabase table is pending or offline
+const memoryStore = new Map();
+
+const LEVEL_TITLE_MAP = {
+    1: 'Mwananchi', 2: 'Mzalendo', 3: 'Kiongozi', 4: 'Mtetezi',
+    5: 'Msimamizi', 6: 'Walinzi', 7: 'Bingwa', 8: 'Shujaa', 9: 'Mwalimu', 10: 'Rais',
+};
+
+const COLOR_PALETTE = ['#f59e0b', '#6366f1', '#ec4899', '#10b981', '#f97316', '#8b5cf6', '#14b8a6', '#ef4444'];
+
+app.post('/api/leaderboard/submit', async (req, res) => {
+    const { user_id, nickname, county, gender, level, xp } = req.body;
+    if (!user_id || !nickname) {
+        return res.status(400).json({ error: 'user_id and nickname are required' });
+    }
+
+    const levelTitle = LEVEL_TITLE_MAP[Math.min(level || 1, 10)] || 'Mwananchi';
+    const entry = {
+        user_id,
+        name: nickname,
+        county: county || 'Nairobi',
+        gender: gender || 'Prefer not to say',
+        level: levelTitle,
+        xp: Number(xp) || 0,
+        weekly_xp: Number(xp) || 0,
+        color: COLOR_PALETTE[Math.abs(user_id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0)) % COLOR_PALETTE.length],
+        updated_at: new Date().toISOString(),
+    };
+
+    memoryStore.set(user_id, entry);
+
+    if (supabase) {
+        try {
+            await supabase.from('leaderboard').upsert({
+                user_id: entry.user_id,
+                nickname: entry.name,
+                county: entry.county,
+                gender: entry.gender,
+                level_title: entry.level,
+                xp: entry.xp,
+                weekly_xp: entry.weekly_xp,
+                updated_at: entry.updated_at,
+            }, { onConflict: 'user_id' });
+        } catch (err) {
+            console.warn('Supabase upsert error (using memory store):', err.message);
+        }
+    }
+
+    res.status(200).json({ success: true, entry });
+});
+
+app.get('/api/leaderboard', async (req, res) => {
+    const { tab = 'alltime', county } = req.query;
+    let list = [];
+
+    if (supabase) {
+        try {
+            let query = supabase.from('leaderboard').select('*');
+            if (tab === 'county' && county) {
+                query = query.ilike('county', county.toString());
+            }
+            if (tab === 'weekly') {
+                query = query.order('weekly_xp', { ascending: false });
+            } else {
+                query = query.order('xp', { ascending: false });
+            }
+            query = query.limit(100);
+
+            const { data, error } = await query;
+            if (!error && data && data.length > 0) {
+                list = data.map((item, idx) => ({
+                    user_id: item.user_id,
+                    name: item.nickname,
+                    county: item.county,
+                    level: item.level_title,
+                    xp: tab === 'weekly' ? item.weekly_xp : item.xp,
+                    color: COLOR_PALETTE[Math.abs((item.user_id || '').split('').reduce((acc, char) => acc + char.charCodeAt(0), 0)) % COLOR_PALETTE.length],
+                    rank: idx + 1,
+                }));
+            }
+        } catch (err) {
+            console.warn('Supabase fetch error, using memory store:', err.message);
+        }
+    }
+
+    if (list.length === 0) {
+        // Use memory store fallback
+        list = Array.from(memoryStore.values());
+        if (tab === 'county' && county) {
+            list = list.filter(item => item.county.toLowerCase() === county.toString().toLowerCase());
+        }
+        list.sort((a, b) => b.xp - a.xp);
+        list = list.map((item, idx) => ({
+            ...item,
+            rank: idx + 1,
+        }));
+    }
+
+    res.status(200).json({ rankings: list });
+});
+
+
 
 const server = app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

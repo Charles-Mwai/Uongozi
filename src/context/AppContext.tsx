@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 import type { User, Screen, QuizState, Question, Toast } from '../types';
 import { BADGE_DEFINITIONS } from '../data/badgeData';
 import { shuffleQuestionOptions } from '../utils/quizUtils';
+import { submitUserScore } from '../services/leaderboardService';
 
 interface AppContextType {
     user: User;
@@ -22,6 +23,7 @@ interface AppContextType {
 }
 
 const defaultUser: User = {
+    user_id: '',
     name: '',
     nickname: '',
     county: '',
@@ -72,34 +74,48 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     // Load user from localStorage and update streak on boot
     useEffect(() => {
         const saved = localStorage.getItem('uongozi_user');
-        if (saved) {
-            const parsed: User = { ...defaultUser, ...JSON.parse(saved) };
-            if (!parsed.seenQuestionIds) parsed.seenQuestionIds = [];
-            const today = new Date().toDateString();
-            const lastActive = parsed.lastActiveDate;
+        let parsed: User;
 
-            if (lastActive && lastActive !== today) {
-                const lastDate = new Date(lastActive);
-                const todayDate = new Date(today);
-                const diffDays = Math.round((todayDate.getTime() - lastDate.getTime()) / (1000 * 60 * 60 * 24));
-                if (diffDays === 1) {
-                    parsed.streak += 1;
-                } else if (diffDays > 1) {
-                    parsed.streak = 1;
-                }
-            } else if (!lastActive) {
+        if (saved) {
+            parsed = { ...defaultUser, ...JSON.parse(saved) };
+        } else {
+            parsed = { ...defaultUser };
+        }
+
+        if (!parsed.user_id) {
+            parsed.user_id = 'usr-' + Math.random().toString(36).substring(2, 9) + Date.now().toString(36);
+        }
+        if (!parsed.seenQuestionIds) parsed.seenQuestionIds = [];
+
+        const today = new Date().toDateString();
+        const lastActive = parsed.lastActiveDate;
+
+        if (lastActive && lastActive !== today) {
+            const lastDate = new Date(lastActive);
+            const todayDate = new Date(today);
+            const diffDays = Math.round((todayDate.getTime() - lastDate.getTime()) / (1000 * 60 * 60 * 24));
+            if (diffDays === 1) {
+                parsed.streak += 1;
+            } else if (diffDays > 1) {
                 parsed.streak = 1;
             }
+        } else if (!lastActive) {
+            parsed.streak = 1;
+        }
 
-            parsed.bestStreak = Math.max(parsed.bestStreak || 0, parsed.streak);
-            parsed.lastActiveDate = today;
-            localStorage.setItem('uongozi_user', JSON.stringify(parsed));
-            setUser(parsed);
-            if (parsed.profileCollected) {
-                setCurrentScreen('home');
-            } else {
-                setCurrentScreen('splash');
-            }
+        parsed.bestStreak = Math.max(parsed.bestStreak || 0, parsed.streak);
+        parsed.lastActiveDate = today;
+        localStorage.setItem('uongozi_user', JSON.stringify(parsed));
+        setUser(parsed);
+
+        if (parsed.nickname) {
+            submitUserScore(parsed);
+        }
+
+        if (parsed.profileCollected) {
+            setCurrentScreen('home');
+        } else {
+            setCurrentScreen('splash');
         }
     }, []);
 
@@ -128,6 +144,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const saveUser = useCallback((updates: Partial<User>): User => {
         setUser(prev => {
             const merged = { ...prev, ...updates };
+            if (!merged.user_id) {
+                merged.user_id = 'usr-' + Math.random().toString(36).substring(2, 9) + Date.now().toString(36);
+            }
             merged.level = Math.floor(merged.xp / 1000) + 1;
             merged.lastActiveDate = new Date().toDateString();
 
@@ -151,6 +170,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             }
 
             localStorage.setItem('uongozi_user', JSON.stringify(merged));
+
+            // Sync score to live backend leaderboard
+            if (merged.nickname) {
+                submitUserScore(merged);
+            }
+
             return merged;
         });
         // Return snapshot for callers that need it immediately
@@ -158,6 +183,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         snap.level = Math.floor(snap.xp / 1000) + 1;
         return snap;
     }, [user, checkAndAwardBadges, showToast]);
+
 
     const awardBadge = useCallback((badgeId: string) => {
         setUser(prev => {

@@ -4,6 +4,8 @@ import { quizData } from '../../data/quizData';
 import { getLevelTitle } from '../../data/badgeData';
 import { getFreshQuestionsForCategory, getDailyChallengeQuestion } from '../../utils/quizUtils';
 import { fetchAiQuestions } from '../../services/quizService';
+import { fetchLeaderboardRankings } from '../../services/leaderboardService';
+import type { LeaderboardEntry } from '../../types';
 import BottomNav from '../ui/BottomNav';
 
 const Home: React.FC = () => {
@@ -60,6 +62,20 @@ const Home: React.FC = () => {
         startQuiz(catId, questions, false, true);
     };
 
+    const [realCountyRank, setRealCountyRank] = useState<number | string>('—');
+
+    React.useEffect(() => {
+        if (!user.county || !user.nickname) return;
+        fetchLeaderboardRankings('county', user.county).then((rankings: LeaderboardEntry[]) => {
+            const index = rankings.findIndex((r: LeaderboardEntry) => r.user_id === user.user_id || r.name === user.nickname);
+            if (index !== -1) {
+                setRealCountyRank(index + 1);
+            } else if (user.xp > 0) {
+                setRealCountyRank(rankings.length + 1);
+            }
+        });
+    }, [user.county, user.user_id, user.nickname, user.xp]);
+
     const levelTitle = getLevelTitle(user.level);
 
     return (
@@ -100,7 +116,7 @@ const Home: React.FC = () => {
                     <div className="stat-label">Total XP</div>
                 </div>
                 <div className="stat-card">
-                    <div className="stat-value">#{user.xp > 0 ? [2840, 1920, 1750, 980, 820].filter(xp => xp > user.xp).length + 1 : '—'}</div>
+                    <div className="stat-value">#{user.xp > 0 ? realCountyRank : '—'}</div>
                     <div className="stat-label">County Rank</div>
                 </div>
             </div>

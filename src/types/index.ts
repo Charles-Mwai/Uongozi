@@ -1,6 +1,7 @@
 export type Screen = 'splash' | 'langSelect' | 'onboarding' | 'home' | 'quiz' | 'results' | 'leaderboard' | 'ask' | 'profile';
 
 export interface User {
+  user_id?: string;
   name: string;
   nickname: string;
   county: string;
@@ -54,12 +55,15 @@ export interface QuizState {
 }
 
 export interface LeaderboardEntry {
+  user_id?: string;
   name: string;
   level: string;
   xp: number;
   county: string;
   color: string;
+  rank?: number;
 }
+
 
 export interface Toast {
   id: number;
