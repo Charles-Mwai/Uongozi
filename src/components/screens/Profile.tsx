@@ -1,16 +1,12 @@
 import React from 'react';
 import { useApp } from '../../context/AppContext';
+import { BADGE_DEFINITIONS, getLevelTitle } from '../../data/badgeData';
 import BottomNav from '../ui/BottomNav';
 
 const Profile: React.FC = () => {
     const { user, setCurrentScreen } = useApp();
 
-    const badges = [
-        { id: 'mzalendo', name: 'Mzalendo', emoji: '🇰🇪', unlocked: user.xp > 0 },
-        { id: 'expert', name: 'Law Expert', emoji: '⚖️', unlocked: user.xp > 1000 },
-        { id: 'streaker', name: '7-Day Streak', emoji: '🔥', unlocked: user.streak >= 7 },
-        { id: 'voter', name: 'Master Voter', emoji: '🗳️', unlocked: user.answered > 50 }
-    ];
+    const levelTitle = getLevelTitle(user.level);
 
     const handleReset = () => {
         if (confirm('Reset all progress? This cannot be undone.')) {
@@ -24,6 +20,8 @@ const Profile: React.FC = () => {
         return (xpInLevel / 1000) * 100;
     };
 
+    const quizzesCompleted = user.completedCategories?.length || 0;
+
     return (
         <div id="profile" className="screen active">
             <header className="home-header">
@@ -36,27 +34,31 @@ const Profile: React.FC = () => {
                 </div>
 
                 <div className="user-greeting">
-                    <p>Civic Hero Profile</p>
+                    <p>Civic Hero Profile • <strong style={{ color: 'var(--gold)' }}>{levelTitle}</strong></p>
                     <h2>{user.nickname || 'Citizen'}</h2>
 
                     <div className="xp-bar-container">
                         <div className="xp-bar-fill" style={{ width: `${calculateLevelProgress()}%` }}></div>
                     </div>
                     <div className="xp-label">
-                        <span>Level {user.level}</span>
+                        <span>Level {user.level} ({levelTitle})</span>
                         <span><strong>{user.xp % 1000}</strong> / 1000 XP</span>
                     </div>
                 </div>
             </header>
 
-            <div className="stats-strip">
+            <div className="stats-strip" style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>
                 <div className="stat-card">
                     <div className="stat-value">{user.xp}</div>
                     <div className="stat-label">Total XP</div>
                 </div>
                 <div className="stat-card">
-                    <div className="stat-value">{user.streak}</div>
-                    <div className="stat-label">Day Streak</div>
+                    <div className="stat-value">{user.streak}🔥</div>
+                    <div className="stat-label">Streak</div>
+                </div>
+                <div className="stat-card">
+                    <div className="stat-value">{quizzesCompleted}/5</div>
+                    <div className="stat-label">Quests</div>
                 </div>
                 <div className="stat-card" onClick={handleReset} style={{ cursor: 'pointer' }}>
                     <div className="stat-value">⚙️</div>
@@ -66,15 +68,26 @@ const Profile: React.FC = () => {
 
             <div className="section">
                 <div className="section-header">
-                    <h3 className="section-title">My Achievements</h3>
+                    <h3 className="section-title">My Achievements ({user.badges?.length || 0}/{BADGE_DEFINITIONS.length})</h3>
                 </div>
                 <div className="badges-grid">
-                    {badges.map(b => (
-                        <div key={b.id} className={`badge-item ${!b.unlocked ? 'locked' : ''}`}>
-                            <div className="badge-emoji">{b.emoji}</div>
-                            <div className="badge-nm">{b.name}</div>
-                        </div>
-                    ))}
+                    {BADGE_DEFINITIONS.map(b => {
+                        const isUnlocked = user.badges?.includes(b.id) || b.check(user);
+                        return (
+                            <div
+                                key={b.id}
+                                className={`badge-item ${!isUnlocked ? 'locked' : ''}`}
+                                title={b.description}
+                                style={{ position: 'relative', cursor: 'help' }}
+                            >
+                                <div className="badge-emoji">{b.emoji}</div>
+                                <div className="badge-nm">{b.name}</div>
+                                <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.6)', marginTop: '2px', lineHeight: '1.2' }}>
+                                    {isUnlocked ? 'Unlocked' : b.description}
+                                </div>
+                            </div>
+                        );
+                    })}
                 </div>
             </div>
 
@@ -90,3 +103,4 @@ const Profile: React.FC = () => {
 };
 
 export default Profile;
+

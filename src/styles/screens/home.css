@@ -415,3 +415,82 @@
     font-size: 14px;
     font-weight: 500;
 }
+
+/* DAILY CHALLENGE CARD */
+.daily-challenge-card {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    border: 1px solid rgba(238, 188, 83, 0.4);
+    border-radius: 20px;
+    padding: 20px 24px;
+    margin: 0 20px 24px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+@media (min-width: 768px) {
+    .daily-challenge-card {
+        max-width: 820px;
+        margin: 0 auto 32px auto;
+    }
+}
+
+@media (min-width: 1024px) {
+    .daily-challenge-card {
+        max-width: 960px;
+    }
+}
+
+.daily-challenge-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.daily-challenge-tag {
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: var(--gold);
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.daily-challenge-xp {
+    background: rgba(238, 188, 83, 0.15);
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    padding: 2px 10px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.daily-challenge-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 12px;
+    line-height: 1.4;
+}
+
+.daily-challenge-btn {
+    background: var(--gold);
+    color: var(--green);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 100px;
+    font-weight: 800;
+    font-size: 13px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.daily-challenge-btn:hover {
+    transform: scale(1.03);
+}

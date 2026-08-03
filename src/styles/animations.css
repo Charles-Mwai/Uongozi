@@ -67,3 +67,44 @@
         opacity: 0;
     }
 }
+
+@keyframes levelUpPulse {
+    0%, 100% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(201, 168, 76, 0.5)); }
+    50% { transform: scale(1.2); filter: drop-shadow(0 0 25px rgba(201, 168, 76, 0.9)); }
+}
+
+@keyframes xpFloatUp {
+    0% {
+        opacity: 0;
+        transform: translateY(10px) scale(0.8);
+    }
+    20% {
+        opacity: 1;
+        transform: translateY(-10px) scale(1.1);
+    }
+    80% {
+        opacity: 1;
+        transform: translateY(-35px) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-50px) scale(0.9);
+    }
+}
+
+.confetti-container {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 99999;
+    overflow: hidden;
+}
+
+.confetti-piece {
+    position: absolute;
+    top: -20px;
+    width: 10px;
+    height: 14px;
+    border-radius: 3px;
+    animation: confettiFall 2.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}

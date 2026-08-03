@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useApp } from '../../context/AppContext';
 import { getKatibaAnswer } from '../../data/katibaData';
+import { quizData } from '../../data/quizData';
 import BottomNav from '../ui/BottomNav';
 
 interface Message {
@@ -9,24 +10,42 @@ interface Message {
     text: string;
     article?: string;
     timestamp: string;
+    reaction?: 'up' | 'down';
 }
 
+const DEFAULT_WELCOME_MSG: Message = {
+    id: 1,
+    type: 'bot',
+    text: "Habari! 👋 I'm your Katiba guide. Ask me anything about Kenya's Constitution 2010, your rights, or how government works. I'll explain it in simple, clear language — in English or Kiswahili!",
+    article: "📖 Based on the Constitution of Kenya, 2010",
+    timestamp: "Just now"
+};
+
 const AskKatiba: React.FC = () => {
-    const { setCurrentScreen, initialQuery, setInitialQuery } = useApp();
-    const [messages, setMessages] = useState<Message[]>([
-        {
-            id: 1,
-            type: 'bot',
-            text: "Habari! 👋 I'm your Katiba guide. Ask me anything about Kenya's Constitution 2010, your rights, or how government works. I'll explain it in simple, clear language — in English or Kiswahili!",
-            article: "📖 Based on the Constitution of Kenya, 2010",
-            timestamp: "Just now"
+    const { setCurrentScreen, initialQuery, setInitialQuery, startQuiz } = useApp();
+    const [messages, setMessages] = useState<Message[]>(() => {
+        const saved = localStorage.getItem('uongozi_chat_history');
+        if (saved) {
+            try {
+                return JSON.parse(saved);
+            } catch {
+                return [DEFAULT_WELCOME_MSG];
+            }
         }
-    ]);
+        return [DEFAULT_WELCOME_MSG];
+    });
     const [input, setInput] = useState('');
     const [isTyping, setIsTyping] = useState(false);
     const scrollRef = useRef<HTMLDivElement>(null);
 
     const initialQueryHandled = useRef(false);
+
+    // Save messages to localStorage
+    useEffect(() => {
+        if (messages.length > 0) {
+            localStorage.setItem('uongozi_chat_history', JSON.stringify(messages.slice(-20)));
+        }
+    }, [messages]);
 
     useEffect(() => {
         if (initialQuery && !initialQueryHandled.current) {
@@ -67,7 +86,6 @@ const AskKatiba: React.FC = () => {
             });
 
             const data = await response.json();
-
             if (data.error) throw new Error(data.error);
 
             const botMsg: Message = {
@@ -80,7 +98,6 @@ const AskKatiba: React.FC = () => {
             setMessages(prev => [...prev, botMsg]);
         } catch (error) {
             console.error('Error:', error);
-            // Fallback to local keyword-matching answers
             const fallback = getKatibaAnswer(text);
             const fallbackMsg: Message = {
                 id: Date.now() + 1,
@@ -93,6 +110,15 @@ const AskKatiba: React.FC = () => {
         } finally {
             setIsTyping(false);
         }
+    };
+
+    const handleReaction = (msgId: number, reaction: 'up' | 'down') => {
+        setMessages(prev => prev.map(m => m.id === msgId ? { ...m, reaction: m.reaction === reaction ? undefined : reaction } : m));
+    };
+
+    const handleQuizThisTopic = () => {
+        // Deep link into basic rights quiz category
+        startQuiz('rights', quizData.rights.questions);
     };
 
     const quickQuestions = [
@@ -133,6 +159,13 @@ const AskKatiba: React.FC = () => {
                         <div className="guide-icon">⚖️</div>
                         <h4>Katiba AI Assistant</h4>
                         <p>Ask in English or Kiswahili to get instant plain-language constitutional article breakdown.</p>
+                        <button
+                            className="quick-btn"
+                            style={{ width: '100%', marginTop: '12px', background: 'var(--gold)', color: 'var(--green)', border: 'none', fontWeight: '800' }}
+                            onClick={handleQuizThisTopic}
+                        >
+                            🎯 Test Knowledge in Quiz!
+                        </button>
                     </div>
                 </aside>
 
@@ -144,6 +177,30 @@ const AskKatiba: React.FC = () => {
                                 <div className="message-bubble">
                                     <div className="message-text">{m.text}</div>
                                     {m.article && <div className="message-tag">{m.article}</div>}
+                                    {m.type === 'bot' && (
+                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '8px', paddingTop: '6px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+                                            <div style={{ display: 'flex', gap: '8px' }}>
+                                                <button
+                                                    onClick={() => handleReaction(m.id, 'up')}
+                                                    style={{ background: 'none', border: 'none', cursor: 'pointer', opacity: m.reaction === 'up' ? 1 : 0.4 }}
+                                                >
+                                                    👍 Helpful
+                                                </button>
+                                                <button
+                                                    onClick={() => handleReaction(m.id, 'down')}
+                                                    style={{ background: 'none', border: 'none', cursor: 'pointer', opacity: m.reaction === 'down' ? 1 : 0.4 }}
+                                                >
+                                                    👎 Not clear
+                                                </button>
+                                            </div>
+                                            <button
+                                                onClick={handleQuizThisTopic}
+                                                style={{ background: 'none', border: 'none', color: 'var(--gold)', cursor: 'pointer', fontWeight: '700', fontSize: '11px' }}
+                                            >
+                                                ⚡ Quiz This
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
                                 <div className="message-meta">Katiba AI • {m.timestamp}</div>
                             </div>
@@ -180,3 +237,4 @@ const AskKatiba: React.FC = () => {
 };
 
 export default AskKatiba;
+

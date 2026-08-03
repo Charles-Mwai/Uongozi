@@ -10,11 +10,14 @@ export interface User {
   xp: number;
   level: number;
   streak: number;
+  bestStreak: number;
   answered: number;
   badges: string[];
   profileCollected: boolean;
   completedCategories: string[];
   lastActiveDate: string;
+  lastChallengeDate: string;
+  categoryProgress: Record<string, number>; // categoryId -> questions answered
 }
 
 export interface Question {
@@ -39,6 +42,8 @@ export interface QuizState {
   current: number;
   score: number;
   answered: boolean;
+  comboCount: number;
+  isReplay: boolean;
 }
 
 export interface LeaderboardEntry {
@@ -48,3 +53,10 @@ export interface LeaderboardEntry {
   county: string;
   color: string;
 }
+
+export interface Toast {
+  id: number;
+  message: string;
+  type: 'xp' | 'badge' | 'streak' | 'levelup' | 'info';
+}
+

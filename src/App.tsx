@@ -10,6 +10,8 @@ import AskKatiba from './components/screens/AskKatiba';
 import Leaderboard from './components/screens/Leaderboard';
 import Profile from './components/screens/Profile';
 import TopNav from './components/ui/TopNav';
+import Toast from './components/ui/Toast';
+import LevelUpOverlay from './components/ui/LevelUpOverlay';
 
 const App: React.FC = () => {
   const { currentScreen } = useApp();
@@ -34,6 +36,8 @@ const App: React.FC = () => {
     <div className="app-container">
       {showNav && <TopNav />}
       {renderScreen()}
+      <Toast />
+      <LevelUpOverlay />
     </div>
   );
 };
